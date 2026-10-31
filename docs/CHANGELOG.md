@@ -2,6 +2,13 @@
 
 All notable changes to `dsh-claude-style` are documented here, newest first.
 
+## [Unreleased]
+
+### 问题修复
+
+- 修复侧栏 dock 在右侧（RTL）时悬停展开（sidebar-peek）闪退无法点击的问题：RTL 帧下跳过 peek 覆盖层，改用原生点击展开
+- sidebar-peek 的 CSS 定位改用 inset-inline-start / margin-inline-start，支持 RTL 布局
+
 ## [0.19.6] - 2026-10-30
 
 [中文](#cn-0.19.6) | [English](#en-0.19.6)
