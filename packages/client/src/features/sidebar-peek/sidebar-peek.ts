@@ -163,6 +163,8 @@ export function install(ctx: HostContext) {
     // Where the centre starts while the column is collapsed, in the frame's own
     // pixels: zero beside the desktop's hidden column, the rail's width on the
     // web. The column's own box reads wider by the border it hangs past its track.
+    // With RTL (right-docked rail), the rail sits on the right edge, so measure
+    // the gap from the centre's right edge to the frame's right edge instead.
     const center = box.querySelector<HTMLElement>(CENTER_SELECTOR)
     if (center === null) {
       phase = 'idle'
@@ -171,7 +173,11 @@ export function install(ctx: HostContext) {
     frame = box
     phase = 'open'
     holdMenuStart()
-    box.style.setProperty(SIDEBAR_PEEK_RAIL_PROPERTY, `${center.offsetLeft}px`)
+    const rtl = getComputedStyle(box).direction === 'rtl'
+    const railPx = rtl
+      ? box.offsetWidth - center.offsetLeft - center.offsetWidth
+      : center.offsetLeft
+    box.style.setProperty(SIDEBAR_PEEK_RAIL_PROPERTY, `${railPx}px`)
     box.setAttribute(SIDEBAR_PEEK_ATTR, SIDEBAR_PEEK_OPEN)
     offFrame = subscribeMutations(box, { attributes: true, attributeFilter: [SIDEBAR_COLLAPSED_ATTRIBUTE] }, onFrameChange)
     hostLayout(ctx).toggleSidebar()
