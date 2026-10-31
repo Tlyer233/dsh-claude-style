@@ -233,12 +233,17 @@ export function install(ctx: HostContext) {
     }, LEAVE_DELAY_MS)
   }
 
+  /** Whether the frame is RTL (right-docked rail): the peek's left-side overlay does not apply. */
+  function isRtl(box: HTMLElement) {
+    return getComputedStyle(box).direction === 'rtl'
+  }
+
   function onPointerOver(event: PointerEvent) {
     if (phase !== 'idle') return
     const toggle = findSidebarToggle()
     if (toggle === null || !(event.target instanceof Node) || !toggle.contains(event.target)) return
     const box = frames.all()[0] ?? null
-    if (box === null || !canOpen(box)) return
+    if (box === null || !canOpen(box) || isRtl(box)) return
     phase = 'waiting'
     openTimer = window.setTimeout(open, OPEN_DELAY_MS)
   }
