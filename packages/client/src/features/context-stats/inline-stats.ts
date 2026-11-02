@@ -332,18 +332,32 @@ export function createInlineStats(read: () => StatsReading, chatText: () => Host
     if (!hasCounts && !hasSpeed && !hasTokens) return
 
     const footerMode = readPrefs().statsPosition === STATS_POSITION_FOOTER
+    if (footerMode && shown.root.firstElementChild !== shown.speed.wrap) {
+      shown.root.append(
+        shown.speed.wrap,
+        shown.cache.wrap,
+        shown.total.wrap,
+        shown.cost.wrap,
+        shown.counts.wrap,
+        shown.input.wrap,
+        shown.output.wrap,
+      )
+    }
     if (footerMode) {
       setAttributeIfChanged(shown.root, FOOTER_DETAIL_ATTR, footerAt === 0 ? 'compact' : footerAt === 1 ? 'exact' : 'directions')
     } else if (shown.root.hasAttribute(FOOTER_DETAIL_ATTR)) {
       shown.root.removeAttribute(FOOTER_DETAIL_ATTR)
     }
-    const directions = footerMode && footerAt >= 2
     show(shown.counts, !footerMode && hasCounts && at < 2)
-    show(shown.speed, !footerMode && hasSpeed)
+    // (Tlyer233 fork, 2026-11-02) compact footer spec: tps / cache / total /
+    // cost, figures only — speed rides the footer too, and the ↑↓ direction
+    // pair steps aside entirely there (detail levels keep cycling for the
+    // inline position only).
+    show(shown.speed, hasSpeed)
     // The prompt tokens ride where the speed is; without a speed the room the
     // speed would have taken is theirs.
-    show(shown.input, footerMode ? directions && hasInput : hasInput && !merged)
-    show(shown.output, footerMode ? directions && hasOutput : hasOutput && !merged)
+    show(shown.input, !footerMode && hasInput && !merged)
+    show(shown.output, !footerMode && hasOutput && !merged)
     // The cost stands beside the written-back figure until the ladder needs
     // its room for the total. It stands whenever the line has tokens and the
     // reader keeps billing on, with the currency's dash while the figure is
@@ -353,7 +367,7 @@ export function createInlineStats(read: () => StatsReading, chatText: () => Host
     show(shown.cost, billing && hasTokens && (cost !== null || costPending) && at < 3)
     // The compact footer carries one token total while its room is narrow, and
     // gives that segment up for the two directions on the widest footer step.
-    show(shown.total, footerMode ? footerAt < 2 && hasTokens : hasTokens && merged)
+    show(shown.total, footerMode ? hasTokens : hasTokens && merged)
     show(shown.cache, hasCache)
     // The compact footer's cache figure carries its own percent sign alone: the
     // words before it would outweigh the figures beside them.
@@ -380,9 +394,7 @@ export function createInlineStats(read: () => StatsReading, chatText: () => Host
       writeTextInPlace(shown.cell.output, readTokens(usage.outputTokens))
       writeText(shown.cell.outputTail, tokenParts[1] ?? '')
       writeTextInPlace(shown.cell.total, footerMode
-        ? footerAt === 0
-          ? `${formatCompactTokens(Math.round(total))}tok`
-          : `${sessionStatsGrouped(Math.round(total), chat)}${tokenParts[1] ?? ' tok'}`
+        ? `${formatCompactTokens(Math.round(total))} tok`
         : readTokens(total))
       // A figure that is still coming keeps the segment's place with the
       // currency's own dash; the amount replaces it in the width it needs, and
