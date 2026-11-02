@@ -364,10 +364,10 @@ export function createInlineStats(read: () => StatsReading, chatText: () => Host
     // still coming (a switch): the toolbar's placement keeps the segment's
     // measure, so the figures after it hold their places. A route the price
     // table cannot price has nothing to wait for, and the segment goes.
-    show(shown.cost, billing && hasTokens && (cost !== null || costPending) && at < 3)
+    show(shown.cost, !footerMode && billing && hasTokens && (cost !== null || costPending) && at < 3)
     // The compact footer carries one token total while its room is narrow, and
     // gives that segment up for the two directions on the widest footer step.
-    show(shown.total, footerMode ? hasTokens : hasTokens && merged && !footerMode)
+    show(shown.total, footerMode ? hasTokens : hasTokens && merged)
     show(shown.cache, !footerMode && hasCache)
     // The compact footer's cache figure carries its own percent sign alone: the
     // words before it would outweigh the figures beside them.
