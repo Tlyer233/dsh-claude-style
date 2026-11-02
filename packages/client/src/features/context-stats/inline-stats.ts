@@ -367,8 +367,8 @@ export function createInlineStats(read: () => StatsReading, chatText: () => Host
     show(shown.cost, billing && hasTokens && (cost !== null || costPending) && at < 3)
     // The compact footer carries one token total while its room is narrow, and
     // gives that segment up for the two directions on the widest footer step.
-    show(shown.total, footerMode ? hasTokens : hasTokens && merged)
-    show(shown.cache, hasCache)
+    show(shown.total, footerMode ? hasTokens : hasTokens && merged && !footerMode)
+    show(shown.cache, !footerMode && hasCache)
     // The compact footer's cache figure carries its own percent sign alone: the
     // words before it would outweigh the figures beside them.
     shown.cell.cacheHead.hidden = footerMode || at >= 1
