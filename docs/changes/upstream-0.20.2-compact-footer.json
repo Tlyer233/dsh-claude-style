@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 12,
+  "at": "2026-11-09",
+  "external": false,
+  "zh": "同步上游 0.20.1 的全部内容，并保留紧凑底栏的 tps 与 total 两项",
+  "en": "Sync all of upstream 0.20.1 while keeping the compact footer's tps and total"
+}
