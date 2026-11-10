@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 23,
+  "at": "2026-11-10",
+  "external": false,
+  "zh": "拖拽松开加入下坠落地，修正仍悬空；Gemini/Qwen 的点击回应动作提速",
+  "en": "Drop a released drag onto the ground so it no longer hovers, and speed up the Gemini/Qwen click reaction"
+}

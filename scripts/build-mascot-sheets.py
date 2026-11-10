@@ -213,10 +213,10 @@ def main():
         for state, action_key in config['states'].items():
             meta = dict(derived[action_key])
             if state == 'landing':
-                # The released-drag landing: the idle strip's first three frames,
+                # The released-drag landing: the idle strip's first six frames,
                 # played once before the idle loop takes over.
-                meta['frames'] = 3
-                meta['still'] = 2
+                meta['frames'] = 6
+                meta['still'] = 5
                 meta['columns'] = derived[action_key]['columns']
                 meta['width'] = derived[action_key]['width']
             sheets[state] = meta

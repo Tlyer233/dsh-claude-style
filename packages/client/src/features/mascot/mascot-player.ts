@@ -20,6 +20,8 @@ export interface MascotSheet {
   still: number
   /** Each frame's own duration in milliseconds; absent means `frames` equal `frameMs` frames. */
   durs?: number[]
+  /** This sheet's own frame time, when it plays at another pace than the character (the press reactions run faster). */
+  frameMs?: number
   /** Frames per sheet row (eight when absent); a strip that holds one long row says so here. */
   columns?: number
 }
@@ -127,10 +129,11 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** What the stage's decisions read off the page: an idle extra starts only in motion, on a visible page. */
   const surroundings = () => ({ extras: character.extras, extrasAllowed: !motionReduced() && !document.hidden, random: Math.random })
 
-  /** How long one round of an animation lasts: its own per-frame durations, or its frame count at the character's pace. */
+  /** How long one round of an animation lasts: its own per-frame durations, or its frame count at the sheet's pace. */
   const playMs = (key: string) => {
     const sheet = SHEETS[key]
-    return sheet.durs === undefined ? sheet.frames * FRAME_MS : sheet.durs.reduce((sum, ms) => sum + ms, 0)
+    const frameMs = sheet.frameMs ?? FRAME_MS
+    return sheet.durs === undefined ? sheet.frames * frameMs : sheet.durs.reduce((sum, ms) => sum + ms, 0)
   }
 
   /** The character's sheet pipeline. */
@@ -291,8 +294,9 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     const keyframes: Keyframe[] = []
     let duration: number
     const sequence = sequenceOf(sheet, mode)
+    const frameMs = sheet.frameMs ?? FRAME_MS
     if (sequence !== null) {
-      duration = sequence.length * FRAME_MS
+      duration = sequence.length * frameMs
       for (let at = 0; at < sequence.length; at++) {
         keyframes.push({ offset: at / sequence.length, transform: frameOffset(sheet, sequence[at]), easing: 'steps(1)' })
       }
@@ -393,6 +397,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty('--dsh-claude-mascot-strip-h', String(cellHeight * Math.ceil(sheet.frames / (sheet.columns ?? 8))))
     setAttributeIfChanged(root, 'data-animation', next.key)
     play(strip, next.key, next.mode, startFrame)
+    if (next.key === 'landing') drop()
     strip.style.transition = 'none'
     strip.style.opacity = '1'
     if (!root.hasAttribute('data-ready')) root.setAttribute('data-ready', '')
@@ -425,7 +430,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (sequence === null) return null
     if (still() && stage.animation === null) return { key: current.key, frame: sheet.still }
     const time = stage.animation !== null && typeof stage.animation.currentTime === 'number' ? stage.animation.currentTime : 0
-    const at = Math.floor(Math.max(0, time) / FRAME_MS) % sequence.length
+    const frameMs = sheet.frameMs ?? FRAME_MS
+    const at = Math.floor(Math.max(0, time) / frameMs) % sequence.length
     return { key: current.key, frame: sequence[at] }
   }
 
@@ -460,6 +466,21 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
       }
     }
     return best
+  }
+
+  /**
+   * The released drag's last few pixels: the pet falls from a small lift to its
+   * ground line while the landing frames play. No fade — a short drop.
+   */
+  function drop() {
+    if (root === null || motionReduced()) return
+    root.style.transition = 'none'
+    root.style.transform = 'translateY(-14px)'
+    requestAnimationFrame(() => {
+      if (root === null) return
+      root.style.transition = 'transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1)'
+      root.style.transform = 'translateY(0)'
+    })
   }
 
   /**
