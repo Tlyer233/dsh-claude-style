@@ -4,5 +4,5 @@
   "at": "2026-11-10",
   "external": false,
   "zh": "修正拖拽松手时小人先向上弹一下的抽搐，改为拖动时抬起、松开后下坠；landing 从第 1 帧起播，姿态匹配避开新循环末尾两帧",
-  "en": "Fix the twitch where the pet jumped up on release: lift it while dragging, drop it on release, start the landing at frame 0, and keep pose matching off the last two frames of the new loop"
+  "en": "Fix the twitch where the pet jumped up on release by lifting it while dragging and dropping it on release, starting the landing at frame 0, and keeping pose matching off the last two frames of the new loop"
 }
