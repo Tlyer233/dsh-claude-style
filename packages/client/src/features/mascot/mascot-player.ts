@@ -54,6 +54,8 @@ export interface MascotCharacter {
   pingpongLoops?: boolean
   /** A click or drag plays its reaction to the end; another press during it is ignored. */
   patientInteractions?: boolean
+  /** The sheet a released drag lands on before the next state: a short one-shot from the idle strip. */
+  landingKey?: string
   /** Start a new state at the frame whose silhouette is closest to the frame on screen, instead of frame 0. */
   poseMatching?: boolean
   /** Image pixels per logical pixel in the routed sheets (4 for the 96×120 cells at 2× display). */
@@ -501,7 +503,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (Math.hypot(event.clientX - stage.press.x, event.clientY - stage.press.y) < LIFT_PX) return
     stage.press.lifted = true
     stage.clicks = []
-    react('drag', character.patientInteractions === true ? 'once' : 'loop')
+    react('drag', 'loop')
   }
 
   /**
@@ -513,9 +515,17 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (stage.press === null || event.pointerId !== stage.press.id) return null
     const lifted = stage.press.lifted
     stage.press = null
-    if (lifted && !(character.patientInteractions === true && stage.reaction?.mode === 'once')) {
-      stage.reaction = null
-      step()
+    if (lifted) {
+      // Let go: the pet leaves the lifted drag pose at once. A patient
+      // character plays its short landing first; the drag animation itself is
+      // never left standing in the air.
+      if (character.landingKey !== undefined && stage.reaction?.key === 'drag') {
+        stage.reaction = { key: character.landingKey, mode: 'once', fresh: true }
+        step()
+      } else {
+        stage.reaction = null
+        step()
+      }
     }
     return lifted
   }

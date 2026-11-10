@@ -41,7 +41,8 @@
         "poke-left": "shy",
         "poke-right": "shy",
         "tickle": "happy",
-        "drag": "drag"
+        "drag": "drag",
+        "landing": "idle"
       }
     },
     "qwen": {
@@ -83,7 +84,8 @@
         "poke-left": "shy",
         "poke-right": "shy",
         "tickle": "tickle",
-        "drag": "drag"
+        "drag": "drag",
+        "landing": "idle"
       }
     }
   }

@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 22,
+  "at": "2026-11-10",
+  "external": false,
+  "zh": "拖拽松开时先播 3 帧落地再回 idle，修复松开后停在空中的问题；点击仍播完再响应",
+  "en": "Land a released drag with a short three-frame landing before idle, so the pet no longer stays in the air; clicks still finish before the next press"
+}

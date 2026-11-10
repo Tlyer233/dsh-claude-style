@@ -168,6 +168,7 @@ export const GEMINI_SHEETS: Record<string, { frames: number, box: number[], stil
   'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
   'tickle': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'drag': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'landing': { frames: 3, box: [0, 0, 48, 60], still: 2, columns: 48 },
 }
 
 /**
@@ -196,4 +197,5 @@ export const QWEN_SHEETS: Record<string, { frames: number, box: number[], still:
   'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
   'tickle': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
   'drag': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'landing': { frames: 3, box: [0, 0, 48, 60], still: 2, columns: 48 },
 }
