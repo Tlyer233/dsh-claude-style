@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 21,
+  "at": "2026-11-10",
+  "external": false,
+  "zh": "去掉 Gemini/Qwen 的交叉淡化，改为按当前姿态就近起播，保留常驻、预加载与正反循环",
+  "en": "Remove the Gemini/Qwen crossfade and start each state at the frame closest to the pose on screen, keeping the resident pet, preloading and ping-pong loops"
+}

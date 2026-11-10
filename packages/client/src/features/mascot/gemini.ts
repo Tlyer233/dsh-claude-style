@@ -27,6 +27,8 @@ export function createMascotGemini(ctx: HostContext, ui: FeatureUi<typeof manife
     extras: ['idle-look', 'idle-spout'],
     pingpongLoops: true,
     patientInteractions: true,
+    poseMatching: true,
+    cellScale: 4,
     createSheets: createRoutedSheetAdapter(GEMINI_SHEET_URLS, 'Gemini'),
   })
 }

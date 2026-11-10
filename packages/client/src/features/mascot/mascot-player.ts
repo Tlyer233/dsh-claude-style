@@ -10,6 +10,9 @@ import type { HostContext } from '@dsh-claude-style/engine/host'
 import type { FeatureUi } from '../../core/feature'
 import type manifest from './mascot.manifest'
 
+/** The keys a press starts: these always play from frame 0, never pose-matched. */
+const REACTION_KEYS = new Set(['poke-left', 'poke-right', 'tickle', 'drag'])
+
 /** One animation's sheet: its frame count, its crop box `[x, y, width, height]` in logical pixels, and its still frame. */
 export interface MascotSheet {
   frames: number
@@ -28,6 +31,8 @@ export interface MascotSheets {
   paint(style: CSSStyleDeclaration, key: string): void
   /** Start loading these sheets ahead of the state that wants them, so a switch never waits on the network. */
   preload?(keys: string[]): void
+  /** One frame's alpha silhouette at 12×12, for matching the new state's pose to the frame on screen. */
+  pose?(key: string, frame: number, cellWidth: number, cellHeight: number, columns: number): number[] | null
   dispose(): void
 }
 
@@ -49,6 +54,10 @@ export interface MascotCharacter {
   pingpongLoops?: boolean
   /** A click or drag plays its reaction to the end; another press during it is ignored. */
   patientInteractions?: boolean
+  /** Start a new state at the frame whose silhouette is closest to the frame on screen, instead of frame 0. */
+  poseMatching?: boolean
+  /** Image pixels per logical pixel in the routed sheets (4 for the 96×120 cells at 2× display). */
+  cellScale?: number
   createSheets(onReady: () => void): MascotSheets
 }
 
@@ -98,17 +107,9 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
 
   /** The nodes the mascot is drawn with, built once per generation. */
   let root: HTMLElement | null = null
-  let sprite: HTMLElement | null = null
   let strip: HTMLElement | null = null
-  /** The frozen outgoing frame during a crossfade, and the timer that removes it. */
-  let ghost: HTMLElement | null = null
-  let ghostTimer: ReturnType<typeof setTimeout> | null = null
-  /** The crossfade a newer switch has superseded; its pending frame is dropped. */
-  let fadeToken = 0
   /** Whether the character's sheets have been asked to load ahead of the states that want them. */
   let preloaded = false
-  /** How long the outgoing frame takes to fade while the new animation starts underneath. */
-  const CROSSFADE_MS = 180
   /** The signal reader, created when the mascot first stands somewhere. */
   let signals: ReturnType<typeof createMascotSignals> | null = null
 
@@ -147,7 +148,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   function build() {
     const built = buildElement('span', PREFIX)
     built.setAttribute('aria-hidden', 'true')
-    sprite = buildElement('span', `${PREFIX}-sprite`)
+    const sprite = buildElement('span', `${PREFIX}-sprite`)
     strip = buildElement('span', `${PREFIX}-strip`)
     sprite.appendChild(strip)
     built.appendChild(sprite)
@@ -274,7 +275,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
    * once animation's end is reported by its `finished`; the deadline
    * schedule() arms is the backstop for a throttled tab.
    */
-  function play(strip: HTMLElement, key: string, mode: PlayMode) {
+  function play(strip: HTMLElement, key: string, mode: PlayMode, startFrame = 0) {
     if (stage.animation !== null) {
       stage.animation.cancel()
       stage.animation = null
@@ -287,26 +288,24 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     strip.style.transform = ''
     const keyframes: Keyframe[] = []
     let duration: number
-    if (sheet.durs === undefined) {
-      // A ping-pong loop walks the frames forward and back: the seam repeats a
-      // frame instead of jumping from the last pose to the first.
-      const pingpong = character.pingpongLoops === true && mode === 'loop' && sheet.frames > 2
-      const sequence: number[] = []
-      for (let frame = 0; frame < sheet.frames; frame++) sequence.push(frame)
-      if (pingpong) for (let frame = sheet.frames - 2; frame > 0; frame--) sequence.push(frame)
+    const sequence = sequenceOf(sheet, mode)
+    if (sequence !== null) {
       duration = sequence.length * FRAME_MS
       for (let at = 0; at < sequence.length; at++) {
         keyframes.push({ offset: at / sequence.length, transform: frameOffset(sheet, sequence[at]), easing: 'steps(1)' })
       }
       keyframes.push({ offset: 1, transform: frameOffset(sheet, mode === 'loop' ? 0 : sheet.frames - 1) })
-    } else {
-      duration = sheet.durs.reduce((sum, ms) => sum + ms, 0)
+    } else if (sheet.durs !== undefined) {
+      const durs = sheet.durs
+      duration = durs.reduce((sum, ms) => sum + ms, 0)
       let at = 0
       for (let frame = 0; frame < sheet.frames; frame++) {
         keyframes.push({ offset: at / duration, transform: frameOffset(sheet, frame), easing: 'steps(1)' })
-        at += sheet.durs[frame]
+        at += durs[frame]
       }
       keyframes.push({ offset: 1, transform: frameOffset(sheet, mode === 'loop' ? 0 : sheet.frames - 1) })
+    } else {
+      return
     }
     const playing = strip.animate(keyframes, {
       duration,
@@ -314,6 +313,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
       fill: 'forwards',
     })
     stage.animation = playing
+    const start = Math.max(0, Math.min(startFrame, sheet.frames - 1))
+    if (start > 0) playing.currentTime = start * FRAME_MS
     if (mode !== 'once') return
     playing.finished.then(() => {
       if (stage.animation !== playing || stage.current === null || stage.current.key !== key || stage.current.done === true) return
@@ -371,12 +372,10 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   function show(root: HTMLElement, strip: HTMLElement, next: MascotPick, now: number) {
     const sheet = SHEETS[next.key]
     const [cellWidth, cellHeight] = cellSize(sheet)
-    // Freeze the outgoing frame before the root's sheet properties move under
-    // it: the new sheet starts at its first frame and the frozen one fades out
-    // over it, so a state change is a blend rather than a cut.
-    const outgoing = stage.current !== null && !still() && sprite !== null && root.hasAttribute('data-ready')
-      ? freezeGhost(strip, sprite)
-      : null
+    // No fade: start the new state at the frame whose silhouette is closest to
+    // the one on screen, so the cut lands on a similar pose. A press reaction
+    // starts at its own first frame, which is the gesture the reader asked for.
+    const startFrame = stage.current !== null && !REACTION_KEYS.has(next.key) ? matchFrame(next.key) : 0
     stage.current = { key: next.key, mode: next.mode, priority: next.priority, start: now }
     if (stage.reaction !== null && stage.reaction.key === next.key) stage.reaction.fresh = false
     const style = root.style
@@ -391,64 +390,74 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty('--dsh-claude-mascot-columns', String(sheet.columns ?? 8))
     style.setProperty('--dsh-claude-mascot-strip-h', String(cellHeight * Math.ceil(sheet.frames / (sheet.columns ?? 8))))
     setAttributeIfChanged(root, 'data-animation', next.key)
-    play(strip, next.key, next.mode)
-    if (outgoing === null) {
-      strip.style.transition = 'none'
-      strip.style.opacity = '1'
-    } else {
-      crossfade(strip, outgoing)
-    }
+    play(strip, next.key, next.mode, startFrame)
+    strip.style.transition = 'none'
+    strip.style.opacity = '1'
     if (!root.hasAttribute('data-ready')) root.setAttribute('data-ready', '')
   }
 
   /**
-   * Copy the strip's current painted frame into an absolutely positioned twin,
-   * so it can hold still while the live strip changes sheet underneath it.
-   * The computed transform is the frame the WAAPI animation is showing right
-   * now; the background is the outgoing sheet.
+   * The frame order one round of an animation plays: a ping-pong loop walks
+   * forward and then back through the same frames, so its seam repeats a pose
+   * instead of jumping; a sheet with per-frame durations has no such order.
    */
-  function freezeGhost(strip: HTMLElement, sprite: HTMLElement) {
-    if (ghost !== null) ghost.remove()
-    if (ghostTimer !== null) clearTimeout(ghostTimer)
-    ghostTimer = null
-    const style = getComputedStyle(strip)
-    const node = document.createElement('span')
-    node.className = strip.className
-    node.setAttribute('aria-hidden', 'true')
-    node.style.cssText = [
-      'position:absolute', 'left:0', 'top:0',
-      `width:${style.width}`, `height:${style.height}`,
-      `background-image:${style.backgroundImage}`,
-      `background-repeat:${style.backgroundRepeat}`,
-      `background-size:${style.backgroundSize}`,
-      `background-position:${style.backgroundPosition}`,
-      `transform:${style.transform}`,
-      `transform-origin:${style.transformOrigin}`,
-      'pointer-events:none', 'opacity:1',
-      `transition:opacity ${CROSSFADE_MS}ms ease`,
-      'will-change:opacity',
-    ].join(';')
-    sprite.appendChild(node)
-    ghost = node
-    return node
+  function sequenceOf(sheet: MascotSheet, mode: PlayMode): number[] | null {
+    if (sheet.durs !== undefined) return null
+    const sequence: number[] = []
+    for (let frame = 0; frame < sheet.frames; frame++) sequence.push(frame)
+    if (character.pingpongLoops === true && mode === 'loop' && sheet.frames > 2) {
+      for (let frame = sheet.frames - 2; frame > 0; frame--) sequence.push(frame)
+    }
+    return sequence
   }
 
-  /** Fade the frozen frame out while the live strip fades its first new frame in. */
-  function crossfade(strip: HTMLElement, outgoing: HTMLElement) {
-    strip.style.transition = 'none'
-    strip.style.opacity = '0'
-    const token = ++fadeToken
-    requestAnimationFrame(() => {
-      if (token !== fadeToken) return
-      strip.style.transition = `opacity ${CROSSFADE_MS}ms ease`
-      strip.style.opacity = '1'
-      outgoing.style.opacity = '0'
-    })
-    ghostTimer = setTimeout(() => {
-      outgoing.remove()
-      if (ghost === outgoing) ghost = null
-      ghostTimer = null
-    }, CROSSFADE_MS + 80)
+  /**
+   * The frame on screen right now, read from the running animation's clock and
+   * mapped back through the sequence the animation was built from.
+   */
+  function currentFrame(): { key: string, frame: number } | null {
+    const current = stage.current
+    if (current === null) return null
+    const sheet = SHEETS[current.key]
+    const sequence = sequenceOf(sheet, current.mode)
+    if (sequence === null) return null
+    if (still() && stage.animation === null) return { key: current.key, frame: sheet.still }
+    const time = stage.animation !== null && typeof stage.animation.currentTime === 'number' ? stage.animation.currentTime : 0
+    const at = Math.floor(Math.max(0, time) / FRAME_MS) % sequence.length
+    return { key: current.key, frame: sequence[at] }
+  }
+
+  /** A frame's alpha silhouette as the loaded sheet renders it, in the sheet's image pixels. */
+  function poseOf(key: string, frame: number) {
+    if (sheets.pose === undefined) return null
+    const sheet = SHEETS[key]
+    const scale = character.cellScale ?? 4
+    return sheets.pose(key, frame, sheet.box[2] * scale, sheet.box[3] * scale, sheet.columns ?? 8)
+  }
+
+  /** The new sheet's frame whose silhouette is closest to the frame on screen. */
+  function matchFrame(nextKey: string): number {
+    if (character.poseMatching !== true || sheets.pose === undefined) return 0
+    const current = currentFrame()
+    if (current === null) return 0
+    const oldPose = poseOf(current.key, current.frame)
+    if (oldPose === null) return 0
+    const next = SHEETS[nextKey]
+    let best = 0
+    let bestScore = Infinity
+    for (let frame = 0; frame < next.frames; frame++) {
+      const pose = poseOf(nextKey, frame)
+      if (pose === null) continue
+      const count = Math.min(oldPose.length, pose.length)
+      let score = 0
+      for (let at = 0; at < count; at++) score += Math.abs(oldPose[at] - pose[at])
+      score /= count
+      if (score < bestScore) {
+        bestScore = score
+        best = frame
+      }
+    }
+    return best
   }
 
   /**
@@ -565,11 +574,6 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   function release() {
     if (stage.timer !== null) clearTimeout(stage.timer)
     if (stage.animation !== null) stage.animation.cancel()
-    fadeToken += 1
-    if (ghostTimer !== null) clearTimeout(ghostTimer)
-    ghostTimer = null
-    if (ghost !== null) ghost.remove()
-    ghost = null
     bubble.leave()
     if (root !== null && root.parentNode !== null) root.parentNode.removeChild(root)
     anchorStamp.release()
@@ -584,7 +588,6 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     sheets.dispose()
     bubble.dispose()
     root = null
-    sprite = null
     strip = null
   }
 

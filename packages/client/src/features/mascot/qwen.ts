@@ -27,6 +27,8 @@ export function createMascotQwen(ctx: HostContext, ui: FeatureUi<typeof manifest
     extras: ['idle-look', 'idle-spout'],
     pingpongLoops: true,
     patientInteractions: true,
+    poseMatching: true,
+    cellScale: 4,
     createSheets: createRoutedSheetAdapter(QWEN_SHEET_URLS, 'Qwen'),
   })
 }
