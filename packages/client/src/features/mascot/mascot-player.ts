@@ -141,8 +141,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   // The idle sheet starts loading as soon as the character is installed: the
   // first stand then shows it without waiting on the route.
   sheets.preload?.(['idle'])
-  /** The balance bubble, carried inside the pointer window it answers to. */
-  const bubble = createMascotBubble(ctx, ui)
+  /** The cost bubble, carried inside the pointer window it answers to. */
+  const bubble = createMascotBubble(ui)
 
   /** A sheet became playable: read the state again and play what it asks for. */
   function onSheetReady() {

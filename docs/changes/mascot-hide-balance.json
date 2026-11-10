@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 25,
+  "at": "2026-11-10",
+  "external": false,
+  "zh": "宠物悬停气泡不再显示余额，也不再读取账户，只保留当前会话费用",
+  "en": "The mascot hover bubble no longer shows or reads the account balance; only the session cost remains"
+}

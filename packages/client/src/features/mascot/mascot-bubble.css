@@ -1,4 +1,4 @@
-/* ── The balance bubble over the mascot ─────────────────────────────────────
+/* ── The cost bubble over the mascot ────────────────────────────────────────
    A speech bubble drawn the way the characters are: square 2px cells, its
    outline four offset shadows that leave the corners open, and a stepped tail
    pointing down at the character, both in the theme's accent on the palette's
@@ -7,8 +7,8 @@
    window (packages/client/src/features/mascot/mascot-bubble.ts), right-aligned
    on it, so it never reaches past the composer's right edge. The text is the
    PoxiaoPixel subset at its 12px design size, where each of its pixels is one
-   CSS pixel. The balance is the figure that matters; the session's cost under
-   it takes the quiet ink. */
+   CSS pixel. The session's cost is the figure it prints; the account balance is
+   not shown. */
 
 body[data-dsh-claude-style] .dsh-claude-mascot-bubble {
   position: absolute;
