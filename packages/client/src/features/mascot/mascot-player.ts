@@ -381,7 +381,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     // No fade: start the new state at the frame whose silhouette is closest to
     // the one on screen, so the cut lands on a similar pose. A press reaction
     // starts at its own first frame, which is the gesture the reader asked for.
-    const startFrame = stage.current !== null && !REACTION_KEYS.has(next.key) ? matchFrame(next.key) : 0
+    const startFrame = stage.current !== null && next.key !== 'landing' && !REACTION_KEYS.has(next.key) ? matchFrame(next.key) : 0
     stage.current = { key: next.key, mode: next.mode, priority: next.priority, start: now }
     if (stage.reaction !== null && stage.reaction.key === next.key) stage.reaction.fresh = false
     const style = root.style
@@ -453,7 +453,10 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     const next = SHEETS[nextKey]
     let best = 0
     let bestScore = Infinity
-    for (let frame = 0; frame < next.frames; frame++) {
+    // Keep the last two frames out of the match: a ping-pong loop reverses
+    // right after the last frame, and starting there reads as a twitch.
+    const limit = next.frames > 3 ? next.frames - 2 : next.frames
+    for (let frame = 0; frame < limit; frame++) {
       const pose = poseOf(nextKey, frame)
       if (pose === null) continue
       const count = Math.min(oldPose.length, pose.length)
@@ -469,18 +472,20 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   }
 
   /**
-   * The released drag's last few pixels: the pet falls from a small lift to its
+   * A released drag's last few pixels: the pet falls from a small lift to its
    * ground line while the landing frames play. No fade — a short drop.
    */
   function drop() {
     if (root === null || motionReduced()) return
-    root.style.transition = 'none'
+    root.style.transition = 'transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1)'
+    root.style.transform = 'translateY(0)'
+  }
+
+  /** The drag lifts the pet a few pixels while it is held, so the release only ever falls. */
+  function lift() {
+    if (root === null || motionReduced()) return
+    root.style.transition = 'transform 120ms ease-out'
     root.style.transform = 'translateY(-14px)'
-    requestAnimationFrame(() => {
-      if (root === null) return
-      root.style.transition = 'transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1)'
-      root.style.transform = 'translateY(0)'
-    })
   }
 
   /**
@@ -524,7 +529,11 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (Math.hypot(event.clientX - stage.press.x, event.clientY - stage.press.y) < LIFT_PX) return
     stage.press.lifted = true
     stage.clicks = []
+    const before = stage.reaction
     react('drag', 'loop')
+    // The root only lifts when the drag actually took the stage: a press the
+    // patient guard ignored must not leave the pet hovering.
+    if (stage.reaction?.key === 'drag' && stage.reaction !== before) lift()
   }
 
   /**
@@ -545,6 +554,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
         step()
       } else {
         stage.reaction = null
+        drop()
         step()
       }
     }
@@ -597,6 +607,10 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
       stage.timer = null
     }
     bubble.leave()
+    if (root !== null) {
+      root.style.transform = ''
+      root.style.transition = ''
+    }
     if (root !== null && root.parentNode !== null) root.parentNode.removeChild(root)
     anchorStamp.release()
   }
@@ -606,6 +620,10 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (stage.timer !== null) clearTimeout(stage.timer)
     if (stage.animation !== null) stage.animation.cancel()
     bubble.leave()
+    if (root !== null) {
+      root.style.transform = ''
+      root.style.transition = ''
+    }
     if (root !== null && root.parentNode !== null) root.parentNode.removeChild(root)
     anchorStamp.release()
     if (signals !== null) signals.dispose()
