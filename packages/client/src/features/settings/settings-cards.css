@@ -71,6 +71,20 @@ body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="deepseek"] {
   background-image: var(--dsh-claude-image-deepseek-mark);
 }
 
+body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="gemini"],
+body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="qwen"] {
+  border-radius: 50%;
+  background-size: cover;
+}
+
+body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="gemini"] {
+  background-image: var(--dsh-claude-image-gemini-avatar);
+}
+
+body[data-dsh-claude-style] .dsh-claude-brand-card-logo[data-brand="qwen"] {
+  background-image: var(--dsh-claude-image-qwen-avatar);
+}
+
 /* The theme style's card reads left to right: the mark, then the brand's word.
    Claude's word is the sidebar's own wordmark, masked over the label colour;
    DeepSeek's lockup carries its whale and its word as one piece, the whale in
@@ -87,6 +101,18 @@ body[data-dsh-claude-style] .dsh-claude-brand-card-word {
   width: calc(16px * 512.22 / 121.54);
   height: 16px;
   background-color: currentColor;
+}
+
+/* Gemini/Qwen carry a word drawn as text rather than a masked wordmark: the
+   brand face at the card's 16px word height. */
+body[data-dsh-claude-style] .dsh-claude-brand-card-word-text {
+  flex: none;
+  font-family: var(--dsh-claude-font-brand);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  color: currentColor;
+  white-space: nowrap;
 }
 
 body[data-dsh-claude-style] .dsh-claude-brand-card-lockup {

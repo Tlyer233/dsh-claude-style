@@ -77,6 +77,8 @@ card leaves unset.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | claude (default) | `#d97757` | `#ffffff` | `#191919` | `#fafafa` | `#1f1f1f` | `#f4f2f3` | `rgba(255, 255, 255, 0.06)` | `#184f95` | `#8ab4f8` | highlight | ink | `#161616` | `#fdfdfd` |
 | deepseek | `#4d6bfe` | `#fbfcff` | `#13161d` | `#f7f9ff` | `#13161d` | `#ecf0ff` | `#262b36` | `#3b56d9` | `#8fa4ff` | surface | accent | `#0f1115` | `#eef1f8` |
+| gemini | `#8b7bd8` | `#fcfaff` | `#191722` | `#f8f4ff` | `#201d2b` | `#f2ecff` | `rgba(255, 255, 255, 0.07)` | `#5b4a9e` | `#b8a7ff` | surface | accent | `#7a3e93` | `#d9c5ff` |
+| qwen | `#4f94d4` | `#fafdff` | `#141a21` | `#f2faff` | `#18222c` | `#eaf6ff` | `rgba(255, 255, 255, 0.06)` | `#2f6fa8` | `#8cc8ff` | surface | accent | `#1f5c8c` | `#bfe3ff` |
 
 | Tone | Seed | Light | Dark |
 | --- | --- | --- | --- |
@@ -122,74 +124,74 @@ card leaves unset.
 | `link` |  | `Δl 0 · C ×1` | `Δl 0 · C ×1` |
 | `link-underline` |  | `Δl 0 · C ×1 · α 0.6` | `Δl 0 · C ×1 · α 0.6` |
 
-| Token | Tone | claude light | claude dark | deepseek light | deepseek dark | Host alias | Use |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| `--dsw-alias-bg-base` | `canvas` | `#ffffff` | `#191919` | `#fbfcff` | `#13161d` | host's own |  |
-| `--dsw-alias-bg-layer-1` | `surface-1` | `#ffffff` | `#212121` | `#fbfcff` | `#1b1e26` | host's own |  |
-| `--dsw-alias-bg-layer-2` | `surface-2` | `#ffffff` | `#282828` | `#fbfcff` | `#22252d` | host's own |  |
-| `--dsw-alias-bg-layer-3` | `surface-3` | `#ffffff` | `#323232` | `#fcfdff` | `#2b2f37` | host's own |  |
-| `--dsw-alias-bg-overlay` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
-| `--dsw-alias-border-l1` | `border-1` / `border-1-flat` | `#e9e9e9` | `rgba(255, 255, 255, 0.09)` | — | `#23262e` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
-| `--dsw-alias-border-l2` | `border-2` / `border-2-flat` | `#dedede` | `rgba(255, 255, 255, 0.18)` | — | `#2c3038` | host's own |  |
-| `--dsw-alias-border-l3` | `border-3` / `border-3-flat` | `#cfcfcf` | `rgba(255, 255, 255, 0.3)` | — | `#3a3d46` | host's own |  |
-| `--dsh-claude-divider` | `divider` | `rgba(22, 22, 22, 0.05)` | `rgba(255, 255, 255, 0.06)` | `rgba(19, 20, 22, 0.05)` | `rgba(251, 255, 255, 0.06)` | `var(--dsw-alias-border-l1)` | a line that only separates: foot areas, settings rows, menu separators, the transcript's rule |
-| `--dsw-alias-brand-primary` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own | the single accent: checks, focus rings, selected marks |
-| `--dsw-alias-brand-text` | `on-accent` | `#ffffff` | `#fbfbfb` | `#fbfcff` | `#f2f7ff` | host's own |  |
-| `--dsw-alias-button-primary-fill` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsw-alias-button-primary-hover` | `accent-hover` | `#c46343` | `#eb9170` | `#3d56e9` | `#6a84ff` | host's own |  |
-| `--dsw-alias-button-elevated-fill` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
-| `--dsw-alias-button-floating-fill` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
-| `--dsw-alias-button-floating-hover` | `surface-3` | `#ffffff` | `#323232` | `#fcfdff` | `#2b2f37` | host's own |  |
-| `--dsw-alias-button-info-fill` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsw-alias-button-info-hover` | `accent-hover` | `#c46343` | `#eb9170` | `#3d56e9` | `#6a84ff` | host's own |  |
-| `--dsw-alias-interactive-bg-active` | `accent-active` | `rgba(246, 136, 98, 0.26)` | `rgba(217, 119, 87, 0.3)` | `rgba(95, 124, 255, 0.26)` | `rgba(77, 107, 254, 0.3)` | host's own |  |
-| `--dsh-claude-hover-bg` | `hover-wash` | `rgba(6, 6, 6, 0.08)` | `rgba(255, 255, 255, 0.08)` | `rgba(4, 4, 6, 0.08)` | `rgba(251, 255, 255, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
-| `--dsh-claude-status-unread` | literal | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | the native unread background-completion reminder, independent of the brand accent |
-| `--dsh-claude-status-awaiting` | literal | `#fab219` | `#fab219` | `#fab219` | `#fab219` | `#fab219` | the sidebar's waiting-for-input yellow: approvals, plan reviews and questions |
-| `--dsh-claude-status-running` | literal | `#898781` | `#898781` | `#898781` | `#898781` | `#898781` | the sidebar's muted neutral running dot |
-| `--dsh-claude-field-ring` | literal | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `var(--dsw-alias-brand-primary)` | the ring around a field the reader is renaming in: the session title's own editor, drawn from the selection blue |
-| `--dsw-focus-ring-color` | literal | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | host's own | the keyboard focus ring: the host's own `:focus-visible` rules paint it, and the skin's fallback ring reads it |
-| `--dsh-claude-inline-code-bg` | `code-wash` | `rgba(6, 6, 6, 0.05)` | `rgba(255, 255, 255, 0.05)` | `rgba(4, 4, 6, 0.05)` | `rgba(251, 255, 255, 0.05)` | `var(--dsw-alias-markdown-inline-code)` | inline code fill |
-| `--dsh-claude-inline-code-fg` | card `code` | `#161616` | `#fdfdfd` | `#0f1115` | `#eef1f8` | `var(--dsw-alias-label-primary)` | inline code ink |
-| `--dsh-claude-link` | `link` | `#184f95` | `#8ab4f8` | `#3b56d9` | `#8fa4ff` | `var(--dsw-alias-link)` | markdown links |
-| `--dsh-claude-link-underline` | `link-underline` | `rgba(24, 79, 149, 0.6)` | `rgba(138, 180, 248, 0.6)` | `rgba(59, 86, 217, 0.6)` | `rgba(143, 164, 255, 0.6)` | `color-mix(in srgb, var(--dsw-alias-link) 60%, transparent)` | markdown link underline |
-| `--dsw-alias-markdown-code-block` | `code-block` | `#ffffff` | `#212121` | `#ffffff` | `#1b1e26` | host's own |  |
-| `--dsw-alias-markdown-code-block-banner` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | host's own |  |
-| `--dsw-alias-interactive-bg-hover` | `--dsh-claude-hover-bg` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | host's own |  |
-| `--dsw-alias-interactive-bg-hover-solid` | `hover-plate` | `#f4f4f4` | `#323232` | `#f0f1f4` | `#2b2f37` | host's own | the host's solid hover chip |
-| `--dsw-alias-label-primary` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own |  |
-| `--dsw-alias-label-primary-bluish` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own |  |
-| `--dsw-alias-label-secondary` | `ink-2` | `#70686a` | `#beb6b8` | `#656871` | `#aeb5c4` | host's own |  |
-| `--dsw-alias-label-tertiary` | `ink-3` | `#91888a` | `#9c9395` | `#848891` | `#8a92a3` | host's own |  |
-| `--dsw-alias-label-caption` | `ink-4` | `#b2acad` | `#776f71` | `#a8abb2` | `#676e7d` | host's own |  |
-| `--dsw-alias-label-shimmer` | `shimmer` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
-| `--dsw-alias-label-deep-diving-shimmer` | `shimmer` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; under Claude it is the same warm band as everywhere else |
-| `--dsw-alias-state-business-primary` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsw-alias-state-business-tertiary` | `accent-tint` | `#f6ded7` | `#48261b` | `#dce4f7` | `#252f4c` | host's own |  |
-| `--dsw-alias-link` | `ui-link` | `#bf6446` | `#eaa088` | `#3e57e0` | `#7594fd` | host's own | text link at rest |
-| `--dsw-alias-shadow-lv2` | literal | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | host's own |  |
-| `--dsw-specific-input-major` | `inset` | `#ffffff` | `#141414` | `#ffffff` | `#0e1117` | host's own |  |
-| `--dsw-specific-selector` | `selector` | `#fefefe` | `#323232` | `#fafbfe` | `#2b2f37` | host's own |  |
-| `--dsw-specific-sidebar-fill` | card `sidebar` | `#fafafa` | `#1f1f1f` | `#f7f9ff` | `#13161d` | host's own |  |
-| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | host's own |  |
-| `--dsh-claude-canvas` | `canvas` | `#ffffff` | `#191919` | `#fbfcff` | `#13161d` | `var(--dsw-alias-bg-base)` | the page canvas |
-| `--dsh-claude-sidebar-canvas` | card `sidebar` | `#fafafa` | `#1f1f1f` | `#f7f9ff` | `#13161d` | `var(--dsw-specific-sidebar-fill)` | the sidebar |
-| `--dsh-claude-card` | `card` | `#ffffff` | `#232323` | `#fbfcff` | `#1d2028` | `var(--dsw-alias-bg-overlay)` | cards on the canvas in light and raised in dark: the account popover, the search palette |
-| `--dsh-claude-inverse-fill` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | `var(--dsw-alias-interactive-bg-hover)` | the model picker's group label fill: an inverted chip under Claude, a hover-plate chip under the host |
-| `--dsh-claude-inverse-ink` | `inverse-ink` | `#ffffff` | `#171717` | `#feffff` | `#11141a` | `var(--dsw-alias-label-primary)` | the model picker's group label ink |
-| `--dsh-claude-table-head` | `table-head` | `#f4f4f4` | `#282828` | `#f0f1f4` | `#22252d` | `var(--dsw-alias-bg-layer-2)` | table header row |
-| `--dsh-claude-ripple-ink` | `ink-3` | `#91888a` | `#9c9395` | `#848891` | `#8a92a3` | `var(--dsw-alias-label-secondary, #8a8a85)` | the new-conversation page's glyph field, and the wake a ripple leaves in it |
-| `--dsh-claude-data-ink` | literal | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `var(--dsw-alias-link, #3b6ecf)` | the home page's data blue: the deepest step of the model chart's ramp and the ink the heat grid's levels are mixed from |
-| `--dsh-claude-ripple-wave` | literal | `#3b6ef0` | `#7fa6ff` | `#3b6ef0` | `#7fa6ff` | `var(--dsw-alias-link, #3b6ef0)` | the front of a ripple in the new-conversation page's glyph field |
-| `--dsh-claude-scrollbar` | `scrollbar` | `rgba(213, 213, 213, 0.9)` | `rgba(62, 62, 62, 0.9)` | `rgba(209, 210, 213, 0.9)` | `rgba(55, 59, 64, 0.9)` | `var(--dsw-alias-border-l2)` | scrollbar thumb |
-| `--dsh-claude-scrollbar-hover` | `scrollbar-hover` | `rgba(138, 138, 138, 0.8)` | `rgba(113, 113, 113, 0.9)` | `rgba(134, 135, 138, 0.8)` | `rgba(105, 109, 115, 0.9)` | `var(--dsw-alias-label-caption)` | scrollbar thumb under the pointer |
-| `--dsh-claude-link-hover` | `ui-link-hover` | `#a35035` | `#ffbea6` | `#2e41c0` | `#91b1ff` | `var(--dsw-alias-link)` | text link under the pointer |
-| `--dsh-claude-logo-ink` | card `logoInk` | `#161616` | `#fdfdfd` | `#4d6bfe` | `#4d6bfe` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
-| `--dsw-specific-menu` | `overlay` | `#ffffff` | — | `#ffffff` | — | host's own |  |
-| `--dsw-specific-bubble` | card `bubble` | `#f4f2f3` | `rgba(255, 255, 255, 0.06)` | `#ecf0ff` | `#262b36` | host's own | user message bubble |
-| `--dsh-claude-chip` | `chip` | `#f9f9f9` | — | `#f5f6f9` | — | `var(--dsw-specific-selector)` | segmented control and switch at rest |
-| `--dsh-claude-meter-peak` | literal | `#a4621d` | `#e2a45f` | `#a4621d` | `#e2a45f` | `var(--dsw-alias-state-warn-label)` | the peak rate badge: the expensive end of a provider's own billing clock |
-| `--dsh-claude-meter-valley` | literal | `#3d7550` | `#8cbf96` | `#3d7550` | `#8cbf96` | `var(--dsw-alias-state-success-primary)` | the off-peak rate badge, and the dated promotions priced below it |
+| Token | Tone | claude light | claude dark | deepseek light | deepseek dark | gemini light | gemini dark | qwen light | qwen dark | Host alias | Use |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `--dsw-alias-bg-base` | `canvas` | `#ffffff` | `#191919` | `#fbfcff` | `#13161d` | `#fcfaff` | `#191722` | `#fafdff` | `#141a21` | host's own |  |
+| `--dsw-alias-bg-layer-1` | `surface-1` | `#ffffff` | `#212121` | `#fbfcff` | `#1b1e26` | `#fcfaff` | `#211f2b` | `#fafdff` | `#1c222a` | host's own |  |
+| `--dsw-alias-bg-layer-2` | `surface-2` | `#ffffff` | `#282828` | `#fbfcff` | `#22252d` | `#fcfaff` | `#282632` | `#fafdff` | `#232a31` | host's own |  |
+| `--dsw-alias-bg-layer-3` | `surface-3` | `#ffffff` | `#323232` | `#fcfdff` | `#2b2f37` | `#fdfbff` | `#32303c` | `#fbfeff` | `#2d333b` | host's own |  |
+| `--dsw-alias-bg-overlay` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | `#fefefe` | `#282632` | `#ffffff` | `#232a31` | host's own |  |
+| `--dsw-alias-border-l1` | `border-1` / `border-1-flat` | `#e9e9e9` | `rgba(255, 255, 255, 0.09)` | — | `#23262e` | — | `#292733` | — | `#242a32` | host's own | the standard edge: card and panel outlines, dividers, field outlines |
+| `--dsw-alias-border-l2` | `border-2` / `border-2-flat` | `#dedede` | `rgba(255, 255, 255, 0.18)` | — | `#2c3038` | — | `#33313d` | — | `#2e343c` | host's own |  |
+| `--dsw-alias-border-l3` | `border-3` / `border-3-flat` | `#cfcfcf` | `rgba(255, 255, 255, 0.3)` | — | `#3a3d46` | — | `#413f4b` | — | `#3b424a` | host's own |  |
+| `--dsh-claude-divider` | `divider` | `rgba(22, 22, 22, 0.05)` | `rgba(255, 255, 255, 0.06)` | `rgba(19, 20, 22, 0.05)` | `rgba(251, 255, 255, 0.06)` | `rgba(20, 18, 22, 0.05)` | `rgba(255, 254, 255, 0.06)` | `rgba(18, 20, 22, 0.05)` | `rgba(248, 255, 255, 0.06)` | `var(--dsw-alias-border-l1)` | a line that only separates: foot areas, settings rows, menu separators, the transcript's rule |
+| `--dsw-alias-brand-primary` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | `#8b7bd8` | `#8b7bd8` | `#4f94d4` | `#4f94d4` | host's own | the single accent: checks, focus rings, selected marks |
+| `--dsw-alias-brand-text` | `on-accent` | `#ffffff` | `#fbfbfb` | `#fbfcff` | `#f2f7ff` | `#fcfaff` | `#fbf9ff` | `#fafdff` | `#f4fdff` | host's own |  |
+| `--dsw-alias-button-primary-fill` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | `#8b7bd8` | `#8b7bd8` | `#4f94d4` | `#4f94d4` | host's own |  |
+| `--dsw-alias-button-primary-hover` | `accent-hover` | `#c46343` | `#eb9170` | `#3d56e9` | `#6a84ff` | `#7968c4` | `#a392e8` | `#3a81c0` | `#6fa9e6` | host's own |  |
+| `--dsw-alias-button-elevated-fill` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | `#fefefe` | `#282632` | `#ffffff` | `#232a31` | host's own |  |
+| `--dsw-alias-button-floating-fill` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | `#fefefe` | `#282632` | `#ffffff` | `#232a31` | host's own |  |
+| `--dsw-alias-button-floating-hover` | `surface-3` | `#ffffff` | `#323232` | `#fcfdff` | `#2b2f37` | `#fdfbff` | `#32303c` | `#fbfeff` | `#2d333b` | host's own |  |
+| `--dsw-alias-button-info-fill` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | `#8b7bd8` | `#8b7bd8` | `#4f94d4` | `#4f94d4` | host's own |  |
+| `--dsw-alias-button-info-hover` | `accent-hover` | `#c46343` | `#eb9170` | `#3d56e9` | `#6a84ff` | `#7968c4` | `#a392e8` | `#3a81c0` | `#6fa9e6` | host's own |  |
+| `--dsw-alias-interactive-bg-active` | `accent-active` | `rgba(246, 136, 98, 0.26)` | `rgba(217, 119, 87, 0.3)` | `rgba(95, 124, 255, 0.26)` | `rgba(77, 107, 254, 0.3)` | `rgba(161, 141, 246, 0.26)` | `rgba(139, 123, 216, 0.3)` | `rgba(94, 169, 242, 0.26)` | `rgba(79, 148, 212, 0.3)` | host's own |  |
+| `--dsh-claude-hover-bg` | `hover-wash` | `rgba(6, 6, 6, 0.08)` | `rgba(255, 255, 255, 0.08)` | `rgba(4, 4, 6, 0.08)` | `rgba(251, 255, 255, 0.08)` | `rgba(4, 3, 6, 0.08)` | `rgba(255, 254, 255, 0.08)` | `rgba(3, 4, 6, 0.08)` | `rgba(248, 255, 255, 0.08)` | `var(--dsw-alias-interactive-bg-hover)` | hover wash |
+| `--dsh-claude-status-unread` | literal | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | the native unread background-completion reminder, independent of the brand accent |
+| `--dsh-claude-status-awaiting` | literal | `#fab219` | `#fab219` | `#fab219` | `#fab219` | `#fab219` | `#fab219` | `#fab219` | `#fab219` | `#fab219` | the sidebar's waiting-for-input yellow: approvals, plan reviews and questions |
+| `--dsh-claude-status-running` | literal | `#898781` | `#898781` | `#898781` | `#898781` | `#898781` | `#898781` | `#898781` | `#898781` | `#898781` | the sidebar's muted neutral running dot |
+| `--dsh-claude-field-ring` | literal | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `#2a78d6` | `var(--dsw-alias-brand-primary)` | the ring around a field the reader is renaming in: the session title's own editor, drawn from the selection blue |
+| `--dsw-focus-ring-color` | literal | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | `rgba(20, 20, 19, 0.45)` | `rgba(250, 249, 245, 0.60)` | host's own | the keyboard focus ring: the host's own `:focus-visible` rules paint it, and the skin's fallback ring reads it |
+| `--dsh-claude-inline-code-bg` | `code-wash` | `rgba(6, 6, 6, 0.05)` | `rgba(255, 255, 255, 0.05)` | `rgba(4, 4, 6, 0.05)` | `rgba(251, 255, 255, 0.05)` | `rgba(4, 3, 6, 0.05)` | `rgba(255, 254, 255, 0.05)` | `rgba(3, 4, 6, 0.05)` | `rgba(248, 255, 255, 0.05)` | `var(--dsw-alias-markdown-inline-code)` | inline code fill |
+| `--dsh-claude-inline-code-fg` | card `code` | `#161616` | `#fdfdfd` | `#0f1115` | `#eef1f8` | `#7a3e93` | `#d9c5ff` | `#1f5c8c` | `#bfe3ff` | `var(--dsw-alias-label-primary)` | inline code ink |
+| `--dsh-claude-link` | `link` | `#184f95` | `#8ab4f8` | `#3b56d9` | `#8fa4ff` | `#5b4a9e` | `#b8a7ff` | `#2f6fa8` | `#8cc8ff` | `var(--dsw-alias-link)` | markdown links |
+| `--dsh-claude-link-underline` | `link-underline` | `rgba(24, 79, 149, 0.6)` | `rgba(138, 180, 248, 0.6)` | `rgba(59, 86, 217, 0.6)` | `rgba(143, 164, 255, 0.6)` | `rgba(91, 74, 158, 0.6)` | `rgba(184, 167, 255, 0.6)` | `rgba(47, 111, 168, 0.6)` | `rgba(140, 200, 255, 0.6)` | `color-mix(in srgb, var(--dsw-alias-link) 60%, transparent)` | markdown link underline |
+| `--dsw-alias-markdown-code-block` | `code-block` | `#ffffff` | `#212121` | `#ffffff` | `#1b1e26` | `#fefefe` | `#211f2b` | `#ffffff` | `#1c222a` | host's own |  |
+| `--dsw-alias-markdown-code-block-banner` | `overlay` | `#ffffff` | `#282828` | `#ffffff` | `#22252d` | `#fefefe` | `#282632` | `#ffffff` | `#232a31` | host's own |  |
+| `--dsw-alias-interactive-bg-hover` | `--dsh-claude-hover-bg` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | `var(--dsh-claude-hover-bg)` | host's own |  |
+| `--dsw-alias-interactive-bg-hover-solid` | `hover-plate` | `#f4f4f4` | `#323232` | `#f0f1f4` | `#2b2f37` | `#f1eff4` | `#32303c` | `#eff2f4` | `#2d333b` | host's own | the host's solid hover chip |
+| `--dsw-alias-label-primary` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | `#141216` | `#fdfbff` | `#121416` | `#f6ffff` | host's own |  |
+| `--dsw-alias-label-primary-bluish` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | `#141216` | `#fdfbff` | `#121416` | `#f6ffff` | host's own |  |
+| `--dsw-alias-label-secondary` | `ink-2` | `#70686a` | `#beb6b8` | `#656871` | `#aeb5c4` | `#69656f` | `#b9b5cb` | `#616a70` | `#aebbca` | host's own |  |
+| `--dsw-alias-label-tertiary` | `ink-3` | `#91888a` | `#9c9395` | `#848891` | `#8a92a3` | `#898590` | `#9692a9` | `#808a90` | `#8a98a8` | host's own |  |
+| `--dsw-alias-label-caption` | `ink-4` | `#b2acad` | `#776f71` | `#a8abb2` | `#676e7d` | `#aca8b1` | `#716e82` | `#a5acb1` | `#677381` | host's own |  |
+| `--dsw-alias-label-shimmer` | `shimmer` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | `#141216` | `#fdfbff` | `#121416` | `#f6ffff` | host's own | the highlight band's tint over running words: the host's own rows and the skin's band (shared/sweep-band.ts) alike |
+| `--dsw-alias-label-deep-diving-shimmer` | `shimmer` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | `#141216` | `#fdfbff` | `#121416` | `#f6ffff` | host's own | the band's tint inside the running row, which the host points --dsw-alias-label-shimmer at; under Claude it is the same warm band as everywhere else |
+| `--dsw-alias-state-business-primary` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | `#8b7bd8` | `#8b7bd8` | `#4f94d4` | `#4f94d4` | host's own |  |
+| `--dsw-alias-state-business-tertiary` | `accent-tint` | `#f6ded7` | `#48261b` | `#dce4f7` | `#252f4c` | `#e3e1f6` | `#302b4a` | `#d6e6f6` | `#18324b` | host's own |  |
+| `--dsw-alias-link` | `ui-link` | `#bf6446` | `#eaa088` | `#3e57e0` | `#7594fd` | `#7767bd` | `#a9a0e4` | `#3e7fba` | `#82b3e2` | host's own | text link at rest |
+| `--dsw-alias-shadow-lv2` | literal | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | `0 4px 18px rgba(20, 20, 19, 0.10), 0 1px 3px rgba(20, 20, 19, 0.05)` | `0 4px 16px rgba(0, 0, 0, 0.30), 0 1px 3px rgba(0, 0, 0, 0.14)` | host's own |  |
+| `--dsw-specific-input-major` | `inset` | `#ffffff` | `#141414` | `#ffffff` | `#0e1117` | `#fefefe` | `#14121c` | `#ffffff` | `#0f151b` | host's own |  |
+| `--dsw-specific-selector` | `selector` | `#fefefe` | `#323232` | `#fafbfe` | `#2b2f37` | `#fbf9fe` | `#32303c` | `#f9fcfe` | `#2d333b` | host's own |  |
+| `--dsw-specific-sidebar-fill` | card `sidebar` | `#fafafa` | `#1f1f1f` | `#f7f9ff` | `#13161d` | `#f8f4ff` | `#201d2b` | `#f2faff` | `#18222c` | host's own |  |
+| `--dsw-alias-brand-primary-new-colorprimary-new-color` | `accent` | `#d97757` | `#d97757` | `#4d6bfe` | `#4d6bfe` | `#8b7bd8` | `#8b7bd8` | `#4f94d4` | `#4f94d4` | host's own |  |
+| `--dsh-claude-canvas` | `canvas` | `#ffffff` | `#191919` | `#fbfcff` | `#13161d` | `#fcfaff` | `#191722` | `#fafdff` | `#141a21` | `var(--dsw-alias-bg-base)` | the page canvas |
+| `--dsh-claude-sidebar-canvas` | card `sidebar` | `#fafafa` | `#1f1f1f` | `#f7f9ff` | `#13161d` | `#f8f4ff` | `#201d2b` | `#f2faff` | `#18222c` | `var(--dsw-specific-sidebar-fill)` | the sidebar |
+| `--dsh-claude-card` | `card` | `#ffffff` | `#232323` | `#fbfcff` | `#1d2028` | `#fcfaff` | `#23212d` | `#fafdff` | `#1e242c` | `var(--dsw-alias-bg-overlay)` | cards on the canvas in light and raised in dark: the account popover, the search palette |
+| `--dsh-claude-inverse-fill` | `ink` | `#161616` | `#fdfdfd` | `#131416` | `#f4f9ff` | `#141216` | `#fdfbff` | `#121416` | `#f6ffff` | `var(--dsw-alias-interactive-bg-hover)` | the model picker's group label fill: an inverted chip under Claude, a hover-plate chip under the host |
+| `--dsh-claude-inverse-ink` | `inverse-ink` | `#ffffff` | `#171717` | `#feffff` | `#11141a` | `#fffeff` | `#17151f` | `#fdffff` | `#12171e` | `var(--dsw-alias-label-primary)` | the model picker's group label ink |
+| `--dsh-claude-table-head` | `table-head` | `#f4f4f4` | `#282828` | `#f0f1f4` | `#22252d` | `#f1eff4` | `#282632` | `#eff2f4` | `#232a31` | `var(--dsw-alias-bg-layer-2)` | table header row |
+| `--dsh-claude-ripple-ink` | `ink-3` | `#91888a` | `#9c9395` | `#848891` | `#8a92a3` | `#898590` | `#9692a9` | `#808a90` | `#8a98a8` | `var(--dsw-alias-label-secondary, #8a8a85)` | the new-conversation page's glyph field, and the wake a ripple leaves in it |
+| `--dsh-claude-data-ink` | literal | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `#3b6ecf` | `var(--dsw-alias-link, #3b6ecf)` | the home page's data blue: the deepest step of the model chart's ramp and the ink the heat grid's levels are mixed from |
+| `--dsh-claude-ripple-wave` | literal | `#3b6ef0` | `#7fa6ff` | `#3b6ef0` | `#7fa6ff` | `#3b6ef0` | `#7fa6ff` | `#3b6ef0` | `#7fa6ff` | `var(--dsw-alias-link, #3b6ef0)` | the front of a ripple in the new-conversation page's glyph field |
+| `--dsh-claude-scrollbar` | `scrollbar` | `rgba(213, 213, 213, 0.9)` | `rgba(62, 62, 62, 0.9)` | `rgba(209, 210, 213, 0.9)` | `rgba(55, 59, 64, 0.9)` | `rgba(210, 208, 213, 0.9)` | `rgba(62, 60, 64, 0.9)` | `rgba(208, 211, 213, 0.9)` | `rgba(56, 64, 64, 0.9)` | `var(--dsw-alias-border-l2)` | scrollbar thumb |
+| `--dsh-claude-scrollbar-hover` | `scrollbar-hover` | `rgba(138, 138, 138, 0.8)` | `rgba(113, 113, 113, 0.9)` | `rgba(134, 135, 138, 0.8)` | `rgba(105, 109, 115, 0.9)` | `rgba(135, 133, 138, 0.8)` | `rgba(113, 111, 115, 0.9)` | `rgba(133, 136, 138, 0.8)` | `rgba(107, 115, 115, 0.9)` | `var(--dsw-alias-label-caption)` | scrollbar thumb under the pointer |
+| `--dsh-claude-link-hover` | `ui-link-hover` | `#a35035` | `#ffbea6` | `#2e41c0` | `#91b1ff` | `#6253a2` | `#c5bcff` | `#2c699f` | `#a0d0ff` | `var(--dsw-alias-link)` | text link under the pointer |
+| `--dsh-claude-logo-ink` | card `logoInk` | `#161616` | `#fdfdfd` | `#4d6bfe` | `#4d6bfe` | `#8b7bd8` | `#8b7bd8` | `#4f94d4` | `#4f94d4` | `var(--dsw-alias-label-primary)` | sidebar brand art: the whale and the wordmark |
+| `--dsw-specific-menu` | `overlay` | `#ffffff` | — | `#ffffff` | — | `#fefefe` | — | `#ffffff` | — | host's own |  |
+| `--dsw-specific-bubble` | card `bubble` | `#f4f2f3` | `rgba(255, 255, 255, 0.06)` | `#ecf0ff` | `#262b36` | `#f2ecff` | `rgba(255, 255, 255, 0.07)` | `#eaf6ff` | `rgba(255, 255, 255, 0.06)` | host's own | user message bubble |
+| `--dsh-claude-chip` | `chip` | `#f9f9f9` | — | `#f5f6f9` | — | `#f6f4f9` | — | `#f4f7f9` | — | `var(--dsw-specific-selector)` | segmented control and switch at rest |
+| `--dsh-claude-meter-peak` | literal | `#a4621d` | `#e2a45f` | `#a4621d` | `#e2a45f` | `#a4621d` | `#e2a45f` | `#a4621d` | `#e2a45f` | `var(--dsw-alias-state-warn-label)` | the peak rate badge: the expensive end of a provider's own billing clock |
+| `--dsh-claude-meter-valley` | literal | `#3d7550` | `#8cbf96` | `#3d7550` | `#8cbf96` | `#3d7550` | `#8cbf96` | `#3d7550` | `#8cbf96` | `var(--dsw-alias-state-success-primary)` | the off-peak rate badge, and the dated promotions priced below it |
 <!-- /generated:tokens -->
 
 ## Two palettes · 两套配色归属

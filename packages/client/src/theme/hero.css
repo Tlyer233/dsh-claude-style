@@ -29,6 +29,34 @@ body[data-dsh-claude-style][data-dsh-claude-brand="deepseek"] [data-dsh-claude-p
   color: var(--dsh-claude-logo-ink);
 }
 
+/* Gemini and Qwen show the original-art head crop at the hero mark's size. */
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="gemini"], [data-dsh-claude-brand="qwen"]) [data-dsh-claude-part~="hero-mark"] > * {
+  display: none !important;
+}
+
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="gemini"], [data-dsh-claude-brand="qwen"]) [data-dsh-claude-part~="hero-mark"] svg {
+  display: none;
+}
+
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="gemini"], [data-dsh-claude-brand="qwen"]) [data-dsh-claude-part~="hero-mark"]::before {
+  content: "";
+  flex: none;
+  width: 42.5px;
+  height: 42.5px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="gemini"] [data-dsh-claude-part~="hero-mark"]::before {
+  background-image: var(--dsh-claude-image-gemini-avatar);
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="qwen"] [data-dsh-claude-part~="hero-mark"]::before {
+  background-image: var(--dsh-claude-image-qwen-avatar);
+}
+
 /* The rules below are the skin's home: they stand while the home layout draws
    the page (features/home/home-layout.ts writes the attribute), and a layout
    turned off leaves the host's own headline, badge and entrance. The mark above

@@ -26,6 +26,8 @@ export interface MascotSheets {
   ready(key: string): boolean
   failed(key: string): boolean
   paint(style: CSSStyleDeclaration, key: string): void
+  /** Start loading these sheets ahead of the state that wants them, so a switch never waits on the network. */
+  preload?(keys: string[]): void
   dispose(): void
 }
 
@@ -34,7 +36,7 @@ export interface MascotSheets {
  * built from the name, and the build reads the marks the stylesheets key on
  * off this type (scripts/source-tree.mjs).
  */
-export type MascotName = 'crab' | 'deepy' | 'whalegirl'
+export type MascotName = 'crab' | 'deepy' | 'whalegirl' | 'gemini' | 'qwen'
 
 /** What one character hands the player (see createMascotPlayer). */
 export interface MascotCharacter {
@@ -43,6 +45,10 @@ export interface MascotCharacter {
   frameMs: number
   gutter?: number
   extras: string[]
+  /** Loops play forward and then back through the same frames: the seam has no jump, at the cost of reverse motion. */
+  pingpongLoops?: boolean
+  /** A click or drag plays its reaction to the end; another press during it is ignored. */
+  patientInteractions?: boolean
   createSheets(onReady: () => void): MascotSheets
 }
 
@@ -63,14 +69,15 @@ export interface MascotCharacter {
  * placement slot or activity service retires the host reads here.
  *
  * @param ui - shared handle table (`ui.composer`).
- * @param character - `{ name, sheets, frameMs, gutter, extras, createSheets }`:
+ * @param character - `{ name, sheets, frameMs, gutter, extras, pingpongLoops, createSheets }`:
  *     `name` prefixes its class names and its anchor mark
  *     (`dsh-claude-<name>`, `data-dsh-claude-<name>-anchor`); `sheets` is the
  *     animation table (`{ frames, box, still, durs?, columns? }` per key, every
  *     key the signals, moments, sleep, extras and reactions name); `gutter` the
  *     transparent margin each frame cell carries in the character's sheets, in
  *     logical pixels (absent when they carry none); `extras` the idle extras;
- *     `createSheets(onReady)` returns `{ ready, failed, paint, dispose }`.
+ *     `pingpongLoops` plays every loop forward and back so its seam cannot jump;
+ *     `createSheets(onReady)` returns `{ ready, failed, paint, preload?, dispose }`.
  * @returns `{ sync, release, onActivity, dispose }`.
  */
 export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manifest>, character: MascotCharacter) {
@@ -93,6 +100,15 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   let root: HTMLElement | null = null
   let sprite: HTMLElement | null = null
   let strip: HTMLElement | null = null
+  /** The frozen outgoing frame during a crossfade, and the timer that removes it. */
+  let ghost: HTMLElement | null = null
+  let ghostTimer: ReturnType<typeof setTimeout> | null = null
+  /** The crossfade a newer switch has superseded; its pending frame is dropped. */
+  let fadeToken = 0
+  /** Whether the character's sheets have been asked to load ahead of the states that want them. */
+  let preloaded = false
+  /** How long the outgoing frame takes to fade while the new animation starts underneath. */
+  const CROSSFADE_MS = 180
   /** The signal reader, created when the mascot first stands somewhere. */
   let signals: ReturnType<typeof createMascotSignals> | null = null
 
@@ -116,6 +132,9 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
 
   /** The character's sheet pipeline. */
   const sheets = character.createSheets(onSheetReady)
+  // The idle sheet starts loading as soon as the character is installed: the
+  // first stand then shows it without waiting on the route.
+  sheets.preload?.(['idle'])
   /** The balance bubble, carried inside the pointer window it answers to. */
   const bubble = createMascotBubble(ctx, ui)
 
@@ -186,13 +205,19 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   function sync(conversation: boolean) {
     const stand = findStand(conversation)
     if (stand === null) {
-      release()
+      park()
       return
     }
     if (root === null) root = build()
     if (signals === null) {
       stage.quietSince = Date.now()
       signals = createMascotSignals(ctx, onMoment, refresh)
+    }
+    if (!preloaded) {
+      preloaded = true
+      // Load every state while the pet is on screen: the first switch to a
+      // state then plays at once instead of waiting on the sheet.
+      sheets.preload?.(Object.keys(SHEETS))
     }
     if (root.parentNode !== stand.element) stand.element.appendChild(root)
     anchorStamp.mark(stand.element, stand.place)
@@ -263,10 +288,17 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     const keyframes: Keyframe[] = []
     let duration: number
     if (sheet.durs === undefined) {
-      duration = sheet.frames * FRAME_MS
-      for (let frame = 0; frame < sheet.frames; frame++) {
-        keyframes.push({ offset: frame / sheet.frames, transform: frameOffset(sheet, frame), easing: 'steps(1)' })
+      // A ping-pong loop walks the frames forward and back: the seam repeats a
+      // frame instead of jumping from the last pose to the first.
+      const pingpong = character.pingpongLoops === true && mode === 'loop' && sheet.frames > 2
+      const sequence: number[] = []
+      for (let frame = 0; frame < sheet.frames; frame++) sequence.push(frame)
+      if (pingpong) for (let frame = sheet.frames - 2; frame > 0; frame--) sequence.push(frame)
+      duration = sequence.length * FRAME_MS
+      for (let at = 0; at < sequence.length; at++) {
+        keyframes.push({ offset: at / sequence.length, transform: frameOffset(sheet, sequence[at]), easing: 'steps(1)' })
       }
+      keyframes.push({ offset: 1, transform: frameOffset(sheet, mode === 'loop' ? 0 : sheet.frames - 1) })
     } else {
       duration = sheet.durs.reduce((sum, ms) => sum + ms, 0)
       let at = 0
@@ -274,8 +306,8 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
         keyframes.push({ offset: at / duration, transform: frameOffset(sheet, frame), easing: 'steps(1)' })
         at += sheet.durs[frame]
       }
+      keyframes.push({ offset: 1, transform: frameOffset(sheet, mode === 'loop' ? 0 : sheet.frames - 1) })
     }
-    keyframes.push({ offset: 1, transform: frameOffset(sheet, mode === 'loop' ? 0 : sheet.frames - 1) })
     const playing = strip.animate(keyframes, {
       duration,
       iterations: mode === 'loop' ? Infinity : 1,
@@ -339,6 +371,12 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   function show(root: HTMLElement, strip: HTMLElement, next: MascotPick, now: number) {
     const sheet = SHEETS[next.key]
     const [cellWidth, cellHeight] = cellSize(sheet)
+    // Freeze the outgoing frame before the root's sheet properties move under
+    // it: the new sheet starts at its first frame and the frozen one fades out
+    // over it, so a state change is a blend rather than a cut.
+    const outgoing = stage.current !== null && !still() && sprite !== null && root.hasAttribute('data-ready')
+      ? freezeGhost(strip, sprite)
+      : null
     stage.current = { key: next.key, mode: next.mode, priority: next.priority, start: now }
     if (stage.reaction !== null && stage.reaction.key === next.key) stage.reaction.fresh = false
     const style = root.style
@@ -354,7 +392,63 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     style.setProperty('--dsh-claude-mascot-strip-h', String(cellHeight * Math.ceil(sheet.frames / (sheet.columns ?? 8))))
     setAttributeIfChanged(root, 'data-animation', next.key)
     play(strip, next.key, next.mode)
+    if (outgoing === null) {
+      strip.style.transition = 'none'
+      strip.style.opacity = '1'
+    } else {
+      crossfade(strip, outgoing)
+    }
     if (!root.hasAttribute('data-ready')) root.setAttribute('data-ready', '')
+  }
+
+  /**
+   * Copy the strip's current painted frame into an absolutely positioned twin,
+   * so it can hold still while the live strip changes sheet underneath it.
+   * The computed transform is the frame the WAAPI animation is showing right
+   * now; the background is the outgoing sheet.
+   */
+  function freezeGhost(strip: HTMLElement, sprite: HTMLElement) {
+    if (ghost !== null) ghost.remove()
+    if (ghostTimer !== null) clearTimeout(ghostTimer)
+    ghostTimer = null
+    const style = getComputedStyle(strip)
+    const node = document.createElement('span')
+    node.className = strip.className
+    node.setAttribute('aria-hidden', 'true')
+    node.style.cssText = [
+      'position:absolute', 'left:0', 'top:0',
+      `width:${style.width}`, `height:${style.height}`,
+      `background-image:${style.backgroundImage}`,
+      `background-repeat:${style.backgroundRepeat}`,
+      `background-size:${style.backgroundSize}`,
+      `background-position:${style.backgroundPosition}`,
+      `transform:${style.transform}`,
+      `transform-origin:${style.transformOrigin}`,
+      'pointer-events:none', 'opacity:1',
+      `transition:opacity ${CROSSFADE_MS}ms ease`,
+      'will-change:opacity',
+    ].join(';')
+    sprite.appendChild(node)
+    ghost = node
+    return node
+  }
+
+  /** Fade the frozen frame out while the live strip fades its first new frame in. */
+  function crossfade(strip: HTMLElement, outgoing: HTMLElement) {
+    strip.style.transition = 'none'
+    strip.style.opacity = '0'
+    const token = ++fadeToken
+    requestAnimationFrame(() => {
+      if (token !== fadeToken) return
+      strip.style.transition = `opacity ${CROSSFADE_MS}ms ease`
+      strip.style.opacity = '1'
+      outgoing.style.opacity = '0'
+    })
+    ghostTimer = setTimeout(() => {
+      outgoing.remove()
+      if (ghost === outgoing) ghost = null
+      ghostTimer = null
+    }, CROSSFADE_MS + 80)
   }
 
   /**
@@ -379,6 +473,9 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
    * playing.
    */
   function react(key: string, mode: PlayMode) {
+    // A patient character finishes the reaction it is already playing before
+    // another press can start one; the strip never restarts mid-poke.
+    if (character.patientInteractions === true && stage.reaction !== null) return
     stage.reaction = { key, mode, fresh: true }
     step()
   }
@@ -387,7 +484,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (event.button !== 0) return
     bubble.leave()
     stage.press = { id: event.pointerId, x: event.clientX, y: event.clientY, lifted: false }
-    ;(event.currentTarget as Element).setPointerCapture(event.pointerId)
+      ; (event.currentTarget as Element).setPointerCapture(event.pointerId)
   }
 
   function onPressMove(event: PointerEvent) {
@@ -395,7 +492,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (Math.hypot(event.clientX - stage.press.x, event.clientY - stage.press.y) < LIFT_PX) return
     stage.press.lifted = true
     stage.clicks = []
-    react('drag', 'loop')
+    react('drag', character.patientInteractions === true ? 'once' : 'loop')
   }
 
   /**
@@ -407,7 +504,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     if (stage.press === null || event.pointerId !== stage.press.id) return null
     const lifted = stage.press.lifted
     stage.press = null
-    if (lifted) {
+    if (lifted && !(character.patientInteractions === true && stage.reaction?.mode === 'once')) {
       stage.reaction = null
       step()
     }
@@ -448,10 +545,31 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     step()
   }
 
+  /**
+   * The page shows no stand for now (a route change, an overlay, a panel
+   * swapping under the composer): detach the pet, but keep its last frame, its
+   * stage and its reading. The next stand re-attaches the same node, so the pet
+   * never blinks through a page that is still finding its composer.
+   */
+  function park() {
+    if (stage.timer !== null) {
+      clearTimeout(stage.timer)
+      stage.timer = null
+    }
+    bubble.leave()
+    if (root !== null && root.parentNode !== null) root.parentNode.removeChild(root)
+    anchorStamp.release()
+  }
+
   /** The page shows no stand: the mascot leaves it, and its reading stops. */
   function release() {
     if (stage.timer !== null) clearTimeout(stage.timer)
     if (stage.animation !== null) stage.animation.cancel()
+    fadeToken += 1
+    if (ghostTimer !== null) clearTimeout(ghostTimer)
+    ghostTimer = null
+    if (ghost !== null) ghost.remove()
+    ghost = null
     bubble.leave()
     if (root !== null && root.parentNode !== null) root.parentNode.removeChild(root)
     anchorStamp.release()

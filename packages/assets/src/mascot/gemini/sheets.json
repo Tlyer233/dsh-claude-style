@@ -1,0 +1,272 @@
+{
+  "idle": {
+    "frames": 48,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 48,
+    "width": 9216,
+    "height": 240,
+    "source": "待机呼吸休闲",
+    "start": 38
+  },
+  "idle-look": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "照镜子",
+    "start": 32
+  },
+  "idle-spout": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "悠闲哼歌",
+    "start": 48
+  },
+  "thinking": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 8,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "工作状态-思考冒泡",
+    "start": 58
+  },
+  "typing": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 8,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "写代码",
+    "start": 50
+  },
+  "music": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "小提琴演奏",
+    "start": 55
+  },
+  "conducting": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "优雅猫耳娘舞",
+    "start": 40
+  },
+  "building": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "工作状态-清点归档",
+    "start": 56
+  },
+  "error": {
+    "frames": 20,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 20,
+    "width": 3840,
+    "height": 240,
+    "source": "点击回应-傲娇生气",
+    "start": 59
+  },
+  "happy": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "点击回应-开心跃动",
+    "start": 46
+  },
+  "notification": {
+    "frames": 20,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 20,
+    "width": 3840,
+    "height": 240,
+    "source": "点击回应-害羞惊讶",
+    "start": 22
+  },
+  "compacting": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "工作状态-忙碌点按",
+    "start": 25
+  },
+  "sleeping": {
+    "frames": 48,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 48,
+    "width": 9216,
+    "height": 240,
+    "source": "原地小憩沉眠",
+    "start": 31
+  },
+  "waking": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "打瞌睡被惊醒",
+    "start": 9
+  },
+  "poke-left": {
+    "frames": 20,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 20,
+    "width": 3840,
+    "height": 240,
+    "source": "点击回应-害羞惊讶",
+    "start": 22
+  },
+  "poke-right": {
+    "frames": 20,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 20,
+    "width": 3840,
+    "height": 240,
+    "source": "点击回应-害羞惊讶",
+    "start": 22
+  },
+  "tickle": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "点击回应-开心跃动",
+    "start": 46
+  },
+  "drag": {
+    "frames": 24,
+    "box": [
+      0,
+      0,
+      48,
+      60
+    ],
+    "still": 0,
+    "columns": 24,
+    "width": 4608,
+    "height": 240,
+    "source": "被鼠标拖拽悬空反馈",
+    "start": 63
+  }
+}

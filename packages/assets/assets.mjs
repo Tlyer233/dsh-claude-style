@@ -41,6 +41,10 @@ export const SOURCE_ONLY = new Set([
   // No upstream icon carries Beam's vendor, so its lockup is composed from this
   // artwork the same way.
   'icons/reflection.svg',
+  // scripts/build-mascot-sheets.py's metadata: the build reads frames/box/still
+  // from it, and the file never ships.
+  'mascot/gemini/sheets.json',
+  'mascot/qwen/sheets.json',
 ])
 
 const SHEET_FILE = /^[a-z]+(?:-[a-z]+)*\.png$/

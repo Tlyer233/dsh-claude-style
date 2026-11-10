@@ -1,4 +1,4 @@
-import { MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_WHALEGIRL } from '../../constants'
+import { MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_GEMINI, MASCOT_QWEN, MASCOT_WHALEGIRL } from '../../constants'
 import type { FeatureManifest } from '../../core/feature'
 
 export default {
@@ -8,11 +8,12 @@ export default {
   reads: ['composer', 'contextStats'],
   contracts: ['chat.think-running', 'composer.fallback-panel', 'composer.seat', 'composer.stack', 'conversation.session', 'conversation.session-attribute'],
   pref: 'mascot',
-  prefValues: [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_WHALEGIRL],
+  prefValues: [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_WHALEGIRL, MASCOT_GEMINI, MASCOT_QWEN],
   stylesheets: [
     { file: 'mascot-frame.css', rank: 345 },
     { file: 'crab.css', rank: 350 },
     { file: 'whale.css', rank: 360 },
+    { file: 'anime-pet.css', rank: 362 },
     { file: 'whale-girl.css', rank: 365 },
     { file: 'mascot-bubble.css', rank: 367 },
   ],
@@ -22,7 +23,7 @@ export default {
     pref: 'mascot',
     title: 'mascotTitle',
     desc: 'mascotDesc',
-    choiceLabels: { brand: 'mascotBrand', crab: 'mascotCrab', deepy: 'mascotDeepy', whalegirl: 'mascotWhaleGirl', off: 'mascotOff' },
+    choiceLabels: { brand: 'mascotBrand', crab: 'mascotCrab', deepy: 'mascotDeepy', whalegirl: 'mascotWhaleGirl', gemini: 'mascotGemini', qwen: 'mascotQwen', off: 'mascotOff' },
   }, {
     // It belongs to the mascot switch above it.
     tab: 'appearance',

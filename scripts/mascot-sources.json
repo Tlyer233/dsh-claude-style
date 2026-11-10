@@ -1,0 +1,90 @@
+{
+  "upstream": "https://github.com/hunmer/aboutme-pets",
+  "commit": "cb205c271517336b500981a2cca050a1759bceaa",
+  "note": "Gemini/Qwen pet assets from hunmer/aboutme-pets. The source README marks the assets non-commercial and asks for attribution on public derivatives; this fork is a personal, non-commercial build. Source files are cached under .debug/mascot-src and are not committed; only the derived strips ship: 48x60 logical cells (96x120 CSS) rendered at 2x display (192x240).",
+  "canvas": { "width": 96, "height": 120, "scale": 2, "fps": 12 },
+  "pets": {
+    "gemini": {
+      "catalog": "pets/gemini/actions.json",
+      "actions": {
+        "idle": { "id": "待机呼吸休闲", "start": 0, "frames": 48, "still": 0 },
+        "mirror": { "id": "照镜子", "start": 0, "frames": 24, "still": 0 },
+        "hum": { "id": "悠闲哼歌", "start": 0, "frames": 24, "still": 0 },
+        "thinking": { "id": "工作状态-思考冒泡", "start": 0, "frames": 24, "still": 8 },
+        "typing": { "id": "写代码", "start": 0, "frames": 24, "still": 8 },
+        "music": { "id": "小提琴演奏", "start": 0, "frames": 24, "still": 0 },
+        "conducting": { "id": "优雅猫耳娘舞", "start": 0, "frames": 24, "still": 0 },
+        "building": { "id": "工作状态-清点归档", "start": 0, "frames": 24, "still": 0 },
+        "error": { "id": "点击回应-傲娇生气", "start": 0, "frames": 20, "still": 0 },
+        "happy": { "id": "点击回应-开心跃动", "start": 0, "frames": 24, "still": 0 },
+        "shy": { "id": "点击回应-害羞惊讶", "start": 0, "frames": 20, "still": 0 },
+        "compacting": { "id": "工作状态-忙碌点按", "start": 0, "frames": 24, "still": 0 },
+        "sleeping": { "id": "原地小憩沉眠", "start": 0, "frames": 48, "still": 0 },
+        "waking": { "id": "打瞌睡被惊醒", "start": 0, "frames": 24, "still": 0 },
+        "drag": { "id": "被鼠标拖拽悬空反馈", "start": 0, "frames": 24, "still": 0 }
+      },
+      "states": {
+        "idle": "idle",
+        "idle-look": "mirror",
+        "idle-spout": "hum",
+        "thinking": "thinking",
+        "typing": "typing",
+        "music": "music",
+        "conducting": "conducting",
+        "building": "building",
+        "error": "error",
+        "happy": "happy",
+        "notification": "shy",
+        "compacting": "compacting",
+        "sleeping": "sleeping",
+        "waking": "waking",
+        "poke-left": "shy",
+        "poke-right": "shy",
+        "tickle": "happy",
+        "drag": "drag"
+      }
+    },
+    "qwen": {
+      "catalog": "pets/qwen/manifest.json",
+      "actions": {
+        "idle": { "id": "待机呼吸休闲", "start": 0, "frames": 48, "still": 0 },
+        "look": { "id": "东张西望", "start": 0, "frames": 24, "still": 0 },
+        "hum": { "id": "悠闲哼歌", "start": 0, "frames": 24, "still": 0 },
+        "thinking": { "id": "工作状态-思考冒泡", "start": 0, "frames": 24, "still": 8 },
+        "typing": { "id": "写代码", "start": 0, "frames": 24, "still": 8 },
+        "music": { "id": "小提琴演奏", "start": 0, "frames": 24, "still": 0 },
+        "conducting": { "id": "优雅折扇舞", "start": 0, "frames": 24, "still": 0 },
+        "building": { "id": "工作状态-清点归档", "start": 0, "frames": 24, "still": 0 },
+        "error": { "id": "傲娇生气", "start": 0, "frames": 20, "still": 0 },
+        "happy": { "id": "开心跃动", "start": 0, "frames": 24, "still": 0 },
+        "wait": { "id": "合扇敲掌·等待不耐烦", "start": 0, "frames": 24, "still": 0 },
+        "compacting": { "id": "工作状态-忙碌点按", "start": 0, "frames": 24, "still": 0 },
+        "sleeping": { "id": "原地小憩沉眠", "start": 0, "frames": 48, "still": 0 },
+        "waking": { "id": "打瞌睡被惊醒", "start": 0, "frames": 24, "still": 0 },
+        "shy": { "id": "害羞惊讶", "start": 0, "frames": 20, "still": 0 },
+        "tickle": { "id": "挠痒咯咯笑", "start": 0, "frames": 20, "still": 0 },
+        "drag": { "id": "被鼠标拖拽悬空反馈", "start": 0, "frames": 24, "still": 0 }
+      },
+      "states": {
+        "idle": "idle",
+        "idle-look": "look",
+        "idle-spout": "hum",
+        "thinking": "thinking",
+        "typing": "typing",
+        "music": "music",
+        "conducting": "conducting",
+        "building": "building",
+        "error": "error",
+        "happy": "happy",
+        "notification": "wait",
+        "compacting": "compacting",
+        "sleeping": "sleeping",
+        "waking": "waking",
+        "poke-left": "shy",
+        "poke-right": "shy",
+        "tickle": "tickle",
+        "drag": "drag"
+      }
+    }
+  }
+}

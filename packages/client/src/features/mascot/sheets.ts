@@ -139,3 +139,61 @@ export const WHALE_GIRL_SHEETS: Record<string, { frames: number, box: number[], 
   'smile-hearts': { frames: 16, box: [0, 0, 69, 66], still: 0, columns: 16, durs: [100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100] },
   'thumbs-up': { frames: 14, box: [0, 0, 69, 66], still: 0, columns: 14, durs: [160, 120, 90, 80, 80, 100, 110, 110, 90, 110, 320, 100, 100, 400] },
 }
+
+/**
+ * Gemini's animations (features/mascot/gemini.ts): the cat-eared girl of the
+ * Gemini pack, 18 states cut from 15 source actions. Each sheet is one long
+ * row of 96×120 frames at 2x (192×240), the feet on the cell's bottom edge.
+ * The keys are the state machine's, so one table drives her like the others;
+ * `notification`, `poke-left` and `poke-right` share the shy action, and
+ * `tickle` shares the happy one, so the frames and still match the source.
+ */
+export const GEMINI_FRAME_MS = 83
+export const GEMINI_SHEETS: Record<string, { frames: number, box: number[], still: number, columns: number }> = {
+  'idle': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
+  'idle-look': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'idle-spout': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'thinking': { frames: 24, box: [0, 0, 48, 60], still: 8, columns: 24 },
+  'typing': { frames: 24, box: [0, 0, 48, 60], still: 8, columns: 24 },
+  'music': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'conducting': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'building': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'error': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'happy': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'notification': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'compacting': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'sleeping': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
+  'waking': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'poke-left': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'tickle': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'drag': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+}
+
+/**
+ * Qwen's animations (features/mascot/qwen.ts): the blue-haired girl of the
+ * Qwen pack, 18 states cut from 17 source actions. The sheets share Gemini's
+ * 96×120, one-row layout; `notification` is the waiting-for-the-reader fan
+ * action, and `poke-left`/`poke-right` share the shy one.
+ */
+export const QWEN_FRAME_MS = 83
+export const QWEN_SHEETS: Record<string, { frames: number, box: number[], still: number, columns: number }> = {
+  'idle': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
+  'idle-look': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'idle-spout': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'thinking': { frames: 24, box: [0, 0, 48, 60], still: 8, columns: 24 },
+  'typing': { frames: 24, box: [0, 0, 48, 60], still: 8, columns: 24 },
+  'music': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'conducting': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'building': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'error': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'happy': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'notification': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'compacting': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'sleeping': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
+  'waking': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+  'poke-left': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'tickle': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'drag': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
+}

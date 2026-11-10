@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL, AUTO_POPOVER_OFF, BRAND_CLAUDE, BRAND_DEEPSEEK, INTERFACE_FONT_SIZE_DEFAULT, INTERFACE_FONT_SIZE_MAX, INTERFACE_FONT_SIZE_MIN, PAGE_ZOOM_DEFAULT, PAGE_ZOOM_MAX, PAGE_ZOOM_MIN, PALETTE_COLORING_BRAND, PALETTE_COLORING_CUSTOM, USERNAME_MAX } from '../../constants'
+import { AUTO_POPOVER_ACCOUNT, AUTO_POPOVER_ALL, AUTO_POPOVER_OFF, BRAND_CLAUDE, BRAND_DEEPSEEK, BRAND_GEMINI, BRAND_QWEN, INTERFACE_FONT_SIZE_DEFAULT, INTERFACE_FONT_SIZE_MAX, INTERFACE_FONT_SIZE_MIN, PAGE_ZOOM_DEFAULT, PAGE_ZOOM_MAX, PAGE_ZOOM_MIN, PALETTE_COLORING_BRAND, PALETTE_COLORING_CUSTOM, USERNAME_MAX } from '../../constants'
 import { COMBINE_SVGS } from 'virtual:dsh-claude-style/generated'
 import { createHostToast } from '../../shared/host-toast'
 import { interfaceFontSizePercent } from '../../shared/interface-font-size'
@@ -27,7 +27,10 @@ export function createSettingsGeneralTab(): SettingsTab {
   /** The name of the colour card that is keeping the page's colours fixed. */
   function paletteName(colouring: Prefs['paletteColors']) {
     if (colouring === PALETTE_COLORING_CUSTOM) return copy('paletteCustom')
-    return colouring === BRAND_DEEPSEEK ? copy('brandDeepseek') : copy('brandClaude')
+    if (colouring === BRAND_DEEPSEEK) return copy('brandDeepseek')
+    if (colouring === BRAND_GEMINI) return copy('brandGemini')
+    if (colouring === BRAND_QWEN) return copy('brandQwen')
+    return copy('brandClaude')
   }
 
   /**
@@ -57,6 +60,24 @@ export function createSettingsGeneralTab(): SettingsTab {
         content: [
           React.createElement('span', { key: 'mark', className: 'dsh-claude-brand-card-logo', 'data-brand': BRAND_CLAUDE, 'aria-hidden': 'true' }),
           React.createElement('span', { key: 'word', className: 'dsh-claude-brand-card-word dsh-claude-masked-word', 'aria-hidden': 'true' }),
+        ],
+      },
+      {
+        value: BRAND_GEMINI,
+        label: copy('brandGemini'),
+        attributes: { 'data-brand': BRAND_GEMINI },
+        content: [
+          React.createElement('span', { key: 'mark', className: 'dsh-claude-brand-card-logo', 'data-brand': BRAND_GEMINI, 'aria-hidden': 'true' }),
+          React.createElement('span', { key: 'word', className: 'dsh-claude-brand-card-word-text', 'aria-hidden': 'true' }, 'Gemini'),
+        ],
+      },
+      {
+        value: BRAND_QWEN,
+        label: copy('brandQwen'),
+        attributes: { 'data-brand': BRAND_QWEN },
+        content: [
+          React.createElement('span', { key: 'mark', className: 'dsh-claude-brand-card-logo', 'data-brand': BRAND_QWEN, 'aria-hidden': 'true' }),
+          React.createElement('span', { key: 'word', className: 'dsh-claude-brand-card-word-text', 'aria-hidden': 'true' }, 'Qwen'),
         ],
       },
     ]

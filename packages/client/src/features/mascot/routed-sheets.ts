@@ -52,12 +52,20 @@ export function createRoutedSheets(urls: Record<string, string>, name: string, o
     return urls[key]
   }
 
+  /**
+   * Ask for these sheets ahead of the state that wants them. The idle sheet
+   * goes first so the pet can appear at once; the rest keep loading behind it.
+   */
+  function preload(keys: string[]) {
+    for (const key of keys) ready(key)
+  }
+
   function dispose() {
     alive = false
     sheets.clear()
   }
 
-  return { ready, failed, url, dispose }
+  return { ready, failed, url, preload, dispose }
 }
 
 /**
@@ -77,6 +85,7 @@ export function createRoutedSheetAdapter(urls: Record<string, string>, name: str
       paint(style: CSSStyleDeclaration, key: string) {
         style.setProperty('--dsh-claude-mascot-sheet', `url("${sheets.url(key)}")`)
       },
+      preload: sheets.preload,
       dispose: sheets.dispose,
     }
   }

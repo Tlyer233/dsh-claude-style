@@ -1,0 +1,35 @@
+/* ── The original-art pets: Gemini and Qwen ──────────────────────────────────
+   Both are drawn on a 48×60 logical grid at 2px a pixel (96×120 CSS), their
+   feet on the top edge of what they stand on. Each sheet is one long row of
+   frames. The shared frame mechanics — the anchor, the sprite's window and the
+   strip — are in packages/client/src/features/mascot/mascot-frame.css; this file
+   gives the pair their size, placement and pointer window. Only the resting
+   girl takes the pointer. */
+
+body[data-dsh-claude-style] :is(.dsh-claude-gemini, .dsh-claude-qwen) {
+  position: absolute;
+  right: 8px;
+  bottom: 100%;
+  z-index: 1;
+  width: 96px;
+  height: 120px;
+  pointer-events: none;
+}
+
+body[data-dsh-claude-style] :is(
+  [data-dsh-claude-gemini-anchor="panel"] > .dsh-claude-gemini,
+  [data-dsh-claude-qwen-anchor="panel"] > .dsh-claude-qwen
+) {
+  bottom: calc(100% - 7px);
+}
+
+/* The resting girl's body, head to feet: most of the 96×120 box. */
+body[data-dsh-claude-style] :is(.dsh-claude-gemini-hit, .dsh-claude-qwen-hit) {
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  width: 80px;
+  height: 104px;
+  pointer-events: auto;
+  touch-action: none;
+}

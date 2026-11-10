@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { BRAND_IMAGE_MAX_BYTES, BRAND_IMAGE_TYPES } from '@dsh-claude-style/contracts/brand'
 import type { BrandImageKind } from '@dsh-claude-style/contracts/brand'
-import { BRAND_CLAUDE, BRAND_INK_ORIGINAL, BRAND_NAME_MAX } from '../../constants'
+import { BRAND_INK_ORIGINAL, BRAND_NAME_MAX } from '../../constants'
 import { loadBrandImages, readBrandImages, removeBrandImage, subscribeBrandImages, uploadBrandImage } from '../../shared/custom-brand'
 import type { BrandImage } from '../../shared/custom-brand'
 import type { Prefs } from '../../constants'
@@ -34,7 +34,18 @@ const NAME_SAVE_DEBOUNCE_MS = 600
  * wordmark is drawn at the cap height itself, while the host draws DeepSeek's
  * word in a 24-unit box beside an 18px whale (theme/sidebar.css).
  */
-const BRAND_ART = {
+interface BrandArt {
+  mark: string
+  word: string | null
+  wordText?: string
+  markRatio: number
+  wordRatio: number
+  wordHeight: number
+  /** The mark is a picture in its own colours (the Gemini/Qwen avatars), not a mask over the brand ink. */
+  picture?: boolean
+}
+
+const BRAND_ART: Record<string, BrandArt> = {
   claude: {
     mark: 'var(--dsh-claude-image-claude-mark)',
     word: 'var(--dsh-claude-image-claude-word)',
@@ -48,6 +59,24 @@ const BRAND_ART = {
     markRatio: 23.16 / 17.04,
     wordRatio: 96 / 24,
     wordHeight: 24 / 18,
+  },
+  gemini: {
+    mark: 'var(--dsh-claude-image-gemini-avatar)',
+    word: null,
+    wordText: 'Gemini',
+    markRatio: 1,
+    wordRatio: 3.4,
+    wordHeight: 1,
+    picture: true,
+  },
+  qwen: {
+    mark: 'var(--dsh-claude-image-qwen-avatar)',
+    word: null,
+    wordText: 'Qwen',
+    markRatio: 1,
+    wordRatio: 2.6,
+    wordHeight: 1,
+    picture: true,
   },
 }
 
@@ -167,13 +196,19 @@ function ImageButton(props: { seat: Seat }) {
  * would show a colour the sidebar never puts there. The reader's picture in its
  * own colours is a picture too, and wears that ink once the choice names one.
  */
-function SeatArt(props: { kind: 'mark' | 'word', image: BrandImage | null, claude: boolean, inked: boolean }) {
-  const art = BRAND_ART[props.claude ? 'claude' : 'deepseek']
+function SeatArt(props: { kind: 'mark' | 'word', image: BrandImage | null, brand: string, inked: boolean }) {
+  const art = BRAND_ART[props.brand] ?? BRAND_ART.claude
   const own = props.image
-  const image = own === null ? (props.kind === 'mark' ? art.mark : art.word) : `url("${own.url}")`
+  if (own === null && props.kind === 'word' && art.word === null) {
+    return React.createElement('span', {
+      className: 'dsh-claude-brand-art dsh-claude-brand-art-word dsh-claude-brand-art-text',
+    }, art.wordText)
+  }
+  const image = own === null ? (props.kind === 'mark' ? art.mark : art.word ?? '') : `url("${own.url}")`
   const ratio = own === null ? (props.kind === 'mark' ? art.markRatio : art.wordRatio) : own.ratio
   const height = own === null && props.kind === 'word' ? art.wordHeight : 1
-  const shape = own === null || props.inked ? 'mask' : 'picture'
+  const picture = own === null ? art.picture === true && props.kind === 'mark' : false
+  const shape = picture ? (props.inked ? 'mask' : 'picture') : own === null || props.inked ? 'mask' : 'picture'
   return React.createElement('span', {
     className: `dsh-claude-brand-art dsh-claude-brand-art-${props.kind}`,
     'data-shape': shape,
@@ -223,7 +258,6 @@ export function BrandLockup(props: { prefs: Prefs, write: SettingsView['write'],
   const [editing, setEditing] = React.useState(false)
   const [draft, setDraft] = React.useState(props.prefs.brandName)
   const timer = React.useRef<number | null>(null)
-  const claude = props.prefs.brand === BRAND_CLAUDE
   const inked = props.prefs.brandInk !== BRAND_INK_ORIGINAL
   const busy = mark.busy || word.busy
 
@@ -270,7 +304,7 @@ export function BrandLockup(props: { prefs: Prefs, write: SettingsView['write'],
     'div',
     {
       className: 'dsh-claude-brand-lockup',
-      'data-brand': claude ? 'claude' : 'deepseek',
+      'data-brand': props.prefs.brand,
       'data-disabled': props.disabled === true ? '' : undefined,
     },
     SeatPicker({ seat: mark }),
@@ -287,7 +321,7 @@ export function BrandLockup(props: { prefs: Prefs, write: SettingsView['write'],
           'aria-label': mark.image === null ? copy('brandMarkUpload') : copy('brandMarkReplace'),
           onClick: mark.open,
         },
-        SeatArt({ kind: 'mark', image: mark.image, claude, inked }),
+        SeatArt({ kind: 'mark', image: mark.image, brand: props.prefs.brand, inked }),
         Plate({ icon: 'upload', className: 'dsh-claude-brand-seat-plate' }),
       ),
       remove(mark, 'dsh-claude-brand-clear-mark'),
@@ -308,7 +342,7 @@ export function BrandLockup(props: { prefs: Prefs, write: SettingsView['write'],
           },
           mode === 'name'
             ? React.createElement('span', { className: 'dsh-claude-brand-typed' }, props.prefs.brandName)
-            : SeatArt({ kind: 'word', image: word.image, claude, inked }),
+            : SeatArt({ kind: 'word', image: word.image, brand: props.prefs.brand, inked }),
           Plate({ icon: mode === 'image' ? 'upload' : 'pencil', className: 'dsh-claude-brand-seat-plate' }),
         ),
       editing ? null : ImageButton({ seat: word }),

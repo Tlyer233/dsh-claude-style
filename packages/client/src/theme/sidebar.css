@@ -56,6 +56,56 @@ body[data-dsh-claude-style][data-dsh-claude-brand="deepseek"] :is([data-dsh-clau
   color: var(--dsh-claude-logo-ink);
 }
 
+/* Gemini and Qwen: the original-art head crops as the mark, and a text word in
+   the brand face. The avatars keep their own colours (the reader's picture rule
+   in features/brand/brand.css still wins while one is supplied). */
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="gemini"], [data-dsh-claude-brand="qwen"]) :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"]) > * {
+  display: none !important;
+}
+
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="gemini"], [data-dsh-claude-brand="qwen"]) :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
+  content: "";
+  display: block;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="gemini"] :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
+  background-image: var(--dsh-claude-image-gemini-avatar);
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="qwen"] :is([data-dsh-claude-part~="brand-mark"], [data-dsh-claude-part~="rail-mark"])::before {
+  background-image: var(--dsh-claude-image-qwen-avatar);
+}
+
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="gemini"], [data-dsh-claude-brand="qwen"]) [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"] > * {
+  display: none !important;
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="gemini"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
+  content: "Gemini";
+}
+
+body[data-dsh-claude-style][data-dsh-claude-brand="qwen"] [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
+  content: "Qwen";
+}
+
+body[data-dsh-claude-style]:is([data-dsh-claude-brand="gemini"], [data-dsh-claude-brand="qwen"]) [data-dsh-claude-part~="brand-identity"] > [data-dsh-claude-part~="brand-name"]::before {
+  display: block;
+  flex: none;
+  font-family: var(--dsh-claude-font-brand);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  white-space: nowrap;
+  color: currentColor;
+}
+
 /* ---------- Claude Code layout: the brand area's switch ---------- */
 /* The Appearance tab's Brand row hides the sidebar's brand area. The host gives
    its logo row a height of its own — 60px on the web, 40px in the desktop

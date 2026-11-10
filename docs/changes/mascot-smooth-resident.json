@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 20,
+  "at": "2026-11-10",
+  "external": false,
+  "zh": "修复 Gemini/Qwen 宠物状态切换硬切、循环接缝与前后静止段延迟，加入交叉淡化、正反循环与常驻，并让点击/拖拽播完再响应",
+  "en": "Smooth the Gemini/Qwen mascots with crossfaded state changes, ping-pong loops, trimmed lead-in and tail, an always-resident pet, and reactions that finish before another press"
+}

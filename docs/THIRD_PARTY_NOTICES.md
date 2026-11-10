@@ -351,3 +351,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## aboutme-pets
+
+The Gemini and Qwen mascot strips (`packages/assets/src/mascot/gemini/`, `packages/assets/src/mascot/qwen/`) and the two head-crop brand marks (`packages/assets/src/brand/gemini-avatar.webp`, `packages/assets/src/brand/qwen-avatar.webp`) are derived from `hunmer/aboutme-pets` at commit `cb205c271517336b500981a2cca050a1759bceaa`, directories `pets/gemini` and `pets/qwen`.
+
+The upstream README states that the artwork may not be used commercially and that public derivatives must credit the upstream repository. The strips here are a personal, non-commercial build; this package's MIT license does not relicense them.
+
+Source: <https://github.com/hunmer/aboutme-pets>

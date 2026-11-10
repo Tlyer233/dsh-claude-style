@@ -37,7 +37,10 @@ const BRAND_CARDS = BRANDS.map((id) => {
 
 /** The name a card goes by, in the settings page's own language. */
 function cardName(card: Card) {
-  return card.id === 'claude' ? copy('brandClaude') : copy('brandDeepseek')
+  if (card.id === 'claude') return copy('brandClaude')
+  if (card.id === 'deepseek') return copy('brandDeepseek')
+  if (card.id === 'gemini') return copy('brandGemini')
+  return copy('brandQwen')
 }
 
 /**

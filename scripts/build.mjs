@@ -150,7 +150,7 @@ const CONSTANTS = (() => {
       brand: { attribute: BRAND_ATTR, deepseek: BRAND_DEEPSEEK },
     },
     brands: BRANDS,
-    ...pick(sheets, sheetsFile, ['CRAB_SHEETS', 'CRAB_GUTTER', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER', 'WHALE_GIRL_SHEETS']),
+    ...pick(sheets, sheetsFile, ['CRAB_SHEETS', 'CRAB_GUTTER', 'DEEPY_SHEETS', 'DEEPY_SCALE', 'DEEPY_GUTTER', 'WHALE_GIRL_SHEETS', 'GEMINI_SHEETS', 'GEMINI_FRAME_MS', 'QWEN_SHEETS', 'QWEN_FRAME_MS']),
     featureSheets: pick(constants, constantsFile, FEATURE_SHEET_CONSTANTS),
   }
 })()
@@ -169,6 +169,9 @@ const BRAND_MARKS = [
   'deepseek-mark.svg',
   // The host's own word beside that whale, from its frontend bundle: the settings lockup draws it.
   'deepseek-word.svg',
+  // The original-art head crops of the Gemini/Qwen pets: coloured pictures, not masks.
+  'gemini-avatar.webp',
+  'qwen-avatar.webp',
   // GitHub's own mark, for the settings page's link to the repository.
   'github-mark.svg',
 ]
@@ -252,6 +255,23 @@ function gutterCrabSheets(cache) {
   return generated
 }
 
+/**
+ * The derived WebP strips' metadata (scripts/build-mascot-sheets.py) must match
+ * the table the browser plays from: frames, crop box, still frame and columns.
+ * The strips themselves are decoded by the build only as bytes; this is the
+ * one place their geometry is checked before the route serves them.
+ */
+function checkWebpSheetTable(dir, table) {
+  const meta = JSON.parse(fs.readFileSync(path.join(ASSETS, 'mascot', dir, 'sheets.json'), 'utf8'))
+  for (const [name, sheet] of Object.entries(table)) {
+    const one = meta[name]
+    if (one === undefined) throw new Error(`build: ${dir}/sheets.json has no "${name}" the table names`)
+    if (one.frames !== sheet.frames || one.still !== sheet.still || one.columns !== sheet.columns || JSON.stringify(one.box) !== JSON.stringify(sheet.box)) {
+      throw new Error(`build: ${dir}["${name}"] and ${dir}/sheets.json disagree`)
+    }
+  }
+}
+
 async function main() {
   checkTypes()
   const manifests = readManifests()
@@ -275,7 +295,11 @@ async function main() {
     replaced: deepy.replaced,
     // Whalegirl's strips keep the deferred mascot chunk small: her art is fetched
     // from the route when an animation is first wanted, as Deepy's is.
-    route: new Set(Object.keys(CONSTANTS.WHALE_GIRL_SHEETS).map((name) => `mascot/whalegirl/${name}.png`)),
+    route: new Set([
+      ...Object.keys(CONSTANTS.WHALE_GIRL_SHEETS).map((name) => `mascot/whalegirl/${name}.png`),
+      ...Object.keys(CONSTANTS.GEMINI_SHEETS).map((name) => `mascot/gemini/${name}.webp`),
+      ...Object.keys(CONSTANTS.QWEN_SHEETS).map((name) => `mascot/qwen/${name}.webp`),
+    ]),
   })
   const claimed = new Set()
   const images = {}
@@ -283,7 +307,7 @@ async function main() {
     const entry = plan.entries.get(`brand/${file}`)
     if (entry === undefined) throw new Error(`build: each asset is claimed or fails the build; brand/${file} is missing`)
     claimed.add(`brand/${file}`)
-    images[path.basename(file, '.svg')] = entry.url
+    images[path.parse(file).name] = entry.url
   }
   const combines = loadCombines(plan, claimed)
 
@@ -315,6 +339,23 @@ async function main() {
     claimed.add(entry.file)
     whaleGirlUrls[name] = entry.url
   }
+  // Gemini/Qwen's larger WebP strips are routed and fetched on demand, like Deepy's.
+  checkWebpSheetTable('gemini', CONSTANTS.GEMINI_SHEETS)
+  checkWebpSheetTable('qwen', CONSTANTS.QWEN_SHEETS)
+  const geminiUrls = {}
+  for (const name of Object.keys(CONSTANTS.GEMINI_SHEETS)) {
+    const entry = plan.entries.get(`mascot/gemini/${name}.webp`)
+    if (entry === undefined) throw new Error(`build: GEMINI_SHEETS["${name}"] has no sheet under packages/assets/src/mascot/gemini/`)
+    claimed.add(entry.file)
+    geminiUrls[name] = entry.url
+  }
+  const qwenUrls = {}
+  for (const name of Object.keys(CONSTANTS.QWEN_SHEETS)) {
+    const entry = plan.entries.get(`mascot/qwen/${name}.webp`)
+    if (entry === undefined) throw new Error(`build: QWEN_SHEETS["${name}"] has no sheet under packages/assets/src/mascot/qwen/`)
+    claimed.add(entry.file)
+    qwenUrls[name] = entry.url
+  }
   checkClaimed(plan, claimed)
 
   const tokenDoc = loadTokens(SRC)
@@ -345,6 +386,8 @@ async function main() {
     CRAB_SHEET_URLS: crab,
     DEEPY_SHEET_URLS: deepyUrls,
     WHALE_GIRL_SHEET_URLS: whaleGirlUrls,
+    GEMINI_SHEET_URLS: geminiUrls,
+    QWEN_SHEET_URLS: qwenUrls,
     // The motion tokens, by name: the browser half reads the same table the token
     // stylesheet carries, so a duration cannot differ between CSS and a Web Animations call (D9).
     MOTION: motionValues(tokenDoc),

@@ -36,6 +36,8 @@
   "backgroundOpacityReset": { "zh": "恢复默认", "en": "Reset" },
   "brandDeepseek": { "zh": "DeepSeek", "en": "DeepSeek" },
   "brandClaude": { "zh": "Claude", "en": "Claude" },
+  "brandGemini": { "zh": "Gemini", "en": "Gemini" },
+  "brandQwen": { "zh": "Qwen", "en": "Qwen" },
   "brandNameTitle": { "zh": "品牌名称", "en": "Brand name" },
   "brandNameEdit": { "zh": "编辑品牌名称", "en": "Edit the brand name" },
   "brandNamePlaceholder": { "zh": "所选品牌", "en": "The chosen brand" },

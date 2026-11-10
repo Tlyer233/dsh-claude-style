@@ -1,0 +1,86 @@
+{
+  "upstream": "https://github.com/hunmer/aboutme-pets",
+  "commit": "cb205c271517336b500981a2cca050a1759bceaa",
+  "pets": {
+    "gemini": {
+      "sources": {
+        "idle": "1c221e272485f96994af9f25c8b53887ea59646a9eb5ba8f8738c38e417615cc",
+        "mirror": "5541a71e6810b58412506d40b39684a84767aed6d6e2ea29c9686bfd3239f7df",
+        "hum": "b999315cb54bd511b1c96a37141d4d1e43cad3ecf6e509c3a0a93eb68fcbf07c",
+        "thinking": "6f1b51c7360e58abbda072ab889f4db1a4cf0c8118df8266940fca49ab39c245",
+        "typing": "f9c44769673b4c403afb55de46a34fdef8207581d4b2767fef28da55e92e4532",
+        "music": "bf89625599bad62eef258c0d0990443cefea54cfc7a6ba8c623772e5d1df9786",
+        "conducting": "41e4219ffa687a268429ca8d512a9e44e551736efbd2ff5be1859ea8c5ce3a58",
+        "building": "e8272f0effc69eec82e0aa7bddc17b73b9af80aa51ca8bce15272bed64e392c0",
+        "error": "e304d771cfdbb68da6b6d72f9eba34681b3242c42957825180cff83476d43418",
+        "happy": "54a4ceb97a59ea9cc67cb7a24853519d4341e48027b86412f4ef264f7c0058af",
+        "shy": "12922da4e468c35862bec7029bdf142f1918af509a2701cadf321a381886ed49",
+        "compacting": "d7551e95090e763d7d1b341794b95907861e7dd66cb423e187b8c2cc0529a7bc",
+        "sleeping": "cc6283960f3447db3b478d085d577c20d6c68542e29b1a06cb303879185ec78a",
+        "waking": "f85c72fcf8e6ac8c72f6d98628ef614af75c6f431a0240073121194ac13d03ae",
+        "drag": "1625746e48ce3d01ce831e01414b15a64102dbf76c73774c1e53595de0ac3408"
+      },
+      "states": {
+        "idle": "26d869e6bc4c4aa5a47c1bcba1d6a3720c024e3f174a079f81f006cd9f055f75",
+        "idle-look": "41a5105837dce948d0c7bf36336d68c97a1fde7ff7daf4aefc0005b784d0dcc4",
+        "idle-spout": "0920abbde93bf72cc2d21200f324981622f860aec24517299030d0645e88614b",
+        "thinking": "d40c74ffcc35f13aac89c9dca6c57b87ccb43b52ab42d59132b0fe5dffa8b7ea",
+        "typing": "794ad885b7ef7ab010c22ab8fc6a5a836cebb59e8787ffc3f22b5f0eff65d783",
+        "music": "f206c911b6c54e51acffd70647ea698dbfe13d6115230ceccb5732cb9df2432f",
+        "conducting": "fc0a294aab5b04fabe83ca835eca79f15eed68efd80fbc3fc9fdd27247e31c42",
+        "building": "1c0325d97165d716a56bcc0f99aeb63aec2763fc9daee088bd3bef4b2ae70b99",
+        "error": "b15363469ef435b82f73619bee7e66e8efc079a2f2fb1048646c0cf261d83e8a",
+        "happy": "90953a05aadf01aacc6cff952b3685cdb766a96bfbec83311eb244d4cfa2433e",
+        "notification": "581eaffc8fd7ff07d1552f100920607e8a5fba1d682103140a81fe0b3962361f",
+        "compacting": "4ecb658c657a93020345574e9bb1dc520d2ee678ee568855e155393eeac8199d",
+        "sleeping": "fea2e3aa37860be42973f6af1e285a22b1db0a0b2782697b8232ae6ca5330946",
+        "waking": "05543709c26114d483352c1f362dca23efb7a01b01f4a0017fad981395f7a78c",
+        "poke-left": "581eaffc8fd7ff07d1552f100920607e8a5fba1d682103140a81fe0b3962361f",
+        "poke-right": "581eaffc8fd7ff07d1552f100920607e8a5fba1d682103140a81fe0b3962361f",
+        "tickle": "90953a05aadf01aacc6cff952b3685cdb766a96bfbec83311eb244d4cfa2433e",
+        "drag": "45dc2031b8b334270ce8884d4c55e9938bbd15e0887592fb66789d7db1c99e00"
+      }
+    },
+    "qwen": {
+      "sources": {
+        "idle": "854fd3046172adb50f495b0c245517c1ecfcae7cc1ab2e4105b1a6b3961d91a7",
+        "look": "6b6a67f7cec0144b607788d932fa9ca482c810ec3828b5522881b89861f02b9e",
+        "hum": "0203065308bca9b00d37730fbc789f8e5d9f20531747dbb14b0c6b5ba6fc48ee",
+        "thinking": "c4b8d01364742d9d958969bedfa9d0a82ec2fa62eb3a99dc23e35afd2dc4f1ea",
+        "typing": "f41f5e0e6465bbc7b1fd2e9274e8ed367753374637052b408c48c290daca878a",
+        "music": "29c1cadeded9324f228a013df5741ee63e4ace44f71c9c657efe9b0eb9e56721",
+        "conducting": "a1b925668dab09e6f4774852781dccdea8aa1fe9640e86d799a07866678a2170",
+        "building": "b8b19df4ae70f8736fe5a5ec0e50cebfb245b76a22f6f98d6c01c93b9c8a0010",
+        "error": "b2b712b9dc42dc50117b4b8bd4409a5e722c36c653b62e54cfc75641c0945142",
+        "happy": "d14f3b0e533101c3457f18f61ce1cbf2ea60258dbbd09cbb2750ce21128e9437",
+        "wait": "2bcfa4154b2fdc69fa032580a8123752aeba3bdf8404372bda20e733e8739140",
+        "compacting": "eeef04d57706575af75aaa6d78c06b33810126ef029f46bf7b1e85d351544dc6",
+        "sleeping": "a8f4bf443f74c0922e99c932a8a2d15603b425e76b254b1c63306f7dbdd63288",
+        "waking": "f87abc7cf7199dacaf02570e2a90bf8471e98941ddf67c8fe6478cc4ef10f8f7",
+        "shy": "ad478f9ddeac4ebc6f3cbd7ab8c8b93510710216213b5adf40c3fd78af81ccc9",
+        "tickle": "3ee3a7653fbf8aed409e8a9474fdca788a572cb848375680e2d527a8e8155408",
+        "drag": "34b68f853a02c1ccd358411f1d8fbb8d00f7dfaacd2273b40689bc0e43ada6ab"
+      },
+      "states": {
+        "idle": "62abd1efabdca71a6f940b190fd7e16543ca9a9772f7103008510c5b2e61ad83",
+        "idle-look": "68f9a525bf5ac9218160a434cdc2a3e1f9fdcda80fe51848607b22a7f535dac9",
+        "idle-spout": "63e7ee11d263d97b56b581d754d70cd82bbeaaa03239e95a6bf9903eb9642d34",
+        "thinking": "25e1c1c9d68617e84809f5a034365bf9d9da231cf2dfb0125bee5254ada3836f",
+        "typing": "5e16150297f1478e5c9d6bbe787938fe2fe83393e1d02ba1973c8a474891c967",
+        "music": "5a43700e86a5a54ea4dd5ff7a09b078819d9ce1c1f07f4a1bcb70d7bf84e49c1",
+        "conducting": "8ef5e4c6d3db5b90f66306b064337352ab0f12a8edc313282241de7211516609",
+        "building": "51223155dfd9025af09543337023ad46deb850b9e7a178967304c6579e1c8efb",
+        "error": "c4b044dc1490468b950f15e04a404a191079c99bb765e55e3e9110629454a21d",
+        "happy": "0293720128f87754743a8fc0607eae3814c7cd0a8c047143f488802610627786",
+        "notification": "3dbc1c92dac34a05454b0bbf5cdca2ef176592ed020a720c5f24199f911937b7",
+        "compacting": "c635f6a9ac2d15911e7a25deb35cecea9aaf93c93613fe4c8c9e6b244a65a782",
+        "sleeping": "436d5581fa4d7cb64b114e1473f60caaf8a0f037e7d890ec6293d0def7e4a0e3",
+        "waking": "cc99e721977822f8d2839863cc3e5e812c02dc98676eee8a81d876c6cf6b0c1c",
+        "poke-left": "ccee5802e3f2afeb1fb0b45a170edbe898d9e70ac96c18170e866077436e2498",
+        "poke-right": "ccee5802e3f2afeb1fb0b45a170edbe898d9e70ac96c18170e866077436e2498",
+        "tickle": "492ba3ec7038523ce46982c2191a9f2a7c2326527cfd1f93b5b6f3fde57de672",
+        "drag": "7d7e4275f2d8b19af1f97e1b6fa1ce5f1430c9b8dbaca63191e393ed9c4d0a6e"
+      }
+    }
+  }
+}

@@ -133,6 +133,22 @@ body[data-dsh-claude-style] .dsh-claude-brand-art-word {
   mask-position: left center;
 }
 
+/* A text word (Gemini/Qwen): no art box and no mask, set in the brand face at
+   the lockup's cap height. */
+body[data-dsh-claude-style] .dsh-claude-brand-art-text {
+  width: auto;
+  height: auto;
+  background: none;
+  -webkit-mask: none;
+  mask: none;
+  font-family: var(--dsh-claude-font-brand);
+  font-size: var(--dsh-claude-lockup-cap);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--dsw-alias-label-primary);
+  white-space: nowrap;
+}
+
 /* A picture: the file's own inks under no mask. */
 body[data-dsh-claude-style] .dsh-claude-brand-art[data-shape="picture"] {
   background-color: transparent;

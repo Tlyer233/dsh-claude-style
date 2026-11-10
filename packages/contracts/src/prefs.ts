@@ -13,13 +13,17 @@ export const BILLING_OFF = 'off'
 /** The billing choices, in the settings' order: the two official tables, or no billing at all. */
 export const BILLING_CHOICES = [BILLING_OFF, ...CURRENCIES] as const
 
-/** Brand marks selectable from the settings page. `claude` is the default. */
+/** Brand marks selectable from the settings page. `gemini` is the default. */
 export const BRAND_CLAUDE = 'claude'
 /** DeepSeek branding keeps the host brand area and selects the DeepSeek palette and mascot. */
 export const BRAND_DEEPSEEK = 'deepseek'
+/** Gemini branding carries the lilac palette and the Gemini mascot. */
+export const BRAND_GEMINI = 'gemini'
+/** Qwen branding carries the light-blue palette and the Qwen mascot. */
+export const BRAND_QWEN = 'qwen'
 /** The stored `off` value that maps to the DeepSeek brand. */
 export const BRAND_DEEPSEEK_LEGACY = 'off'
-export const BRANDS = [BRAND_CLAUDE, BRAND_DEEPSEEK] as const
+export const BRANDS = [BRAND_CLAUDE, BRAND_DEEPSEEK, BRAND_GEMINI, BRAND_QWEN] as const
 
 /** Palette card choice; `brand` follows the selected brand and stays independent of its artwork. */
 export const PALETTE_COLORING_BRAND = 'brand'
@@ -80,13 +84,15 @@ export const TYPEFACE_SYSTEM = 'system'
 export const TYPEFACE_HOST = 'host'
 export const TYPEFACES = [TYPEFACE_CLAUDE, TYPEFACE_SYSTEM, TYPEFACE_HOST] as const
 
-/** The mascot on the composer, chosen apart from the brand: follow the brand, pick one of the three, or show none. */
+/** The mascot on the composer, chosen apart from the brand: follow the brand, pick one of the five, or show none. */
 export const MASCOT_BRAND = 'brand'
 export const MASCOT_CRAB = 'crab'
 export const MASCOT_DEEPY = 'deepy'
 export const MASCOT_WHALEGIRL = 'whalegirl'
+export const MASCOT_GEMINI = 'gemini'
+export const MASCOT_QWEN = 'qwen'
 export const MASCOT_OFF = 'off'
-export const MASCOTS = [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_WHALEGIRL, MASCOT_OFF] as const
+export const MASCOTS = [MASCOT_BRAND, MASCOT_CRAB, MASCOT_DEEPY, MASCOT_WHALEGIRL, MASCOT_GEMINI, MASCOT_QWEN, MASCOT_OFF] as const
 /** Where the mascot stands: the home page alone, or the home page and the conversation. */
 export const MASCOT_SCOPE_HOME = 'home'
 export const MASCOT_SCOPE_ALL = 'all'
@@ -226,7 +232,7 @@ export type PrefSpec = BooleanSpec | ChoiceSpec | TextSpec | ColorSpec | ListSpe
  * clamping here keeps legacy or invalid values from preventing startup.
  */
 export const PREFS = {
-  brand: { type: 'choice', values: BRANDS, default: BRAND_CLAUDE, legacy: { [BRAND_DEEPSEEK_LEGACY]: BRAND_DEEPSEEK } },
+  brand: { type: 'choice', values: BRANDS, default: BRAND_GEMINI, legacy: { [BRAND_DEEPSEEK_LEGACY]: BRAND_DEEPSEEK } },
   brandName: { type: 'text', default: '', max: BRAND_NAME_MAX },
   brandInk: { type: 'choice', values: BRAND_INKS, default: BRAND_INK_ORIGINAL },
   /** Whether the sidebar draws its brand area; off collapses that area and leaves the sidebar toggle in place. */
@@ -332,10 +338,10 @@ export type PrefKey = keyof typeof PREFS
 /** One preference's value type, from its declaration. */
 type SpecValue<S> =
   S extends { readonly type: 'boolean' } ? boolean :
-    S extends { readonly type: 'choice', readonly values: readonly (infer V)[] } ? V :
-      S extends { readonly type: 'text' | 'color' } ? string :
-        S extends { readonly type: 'list' } ? string[] :
-          never
+  S extends { readonly type: 'choice', readonly values: readonly (infer V)[] } ? V :
+  S extends { readonly type: 'text' | 'color' } ? string :
+  S extends { readonly type: 'list' } ? string[] :
+  never
 
 /** Browser preference shape derived from declarations; choice fields retain their value unions. */
 export type Prefs = { [K in PrefKey]: SpecValue<typeof PREFS[K]> }
