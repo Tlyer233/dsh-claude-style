@@ -144,7 +144,11 @@ def main():
 
     doc = json.loads(MANIFEST.read_text(encoding='utf-8'))
     entry = {'upstream': doc['upstream'], 'commit': doc['commit']}
-    lock = {'upstream': doc['upstream'], 'commit': doc['commit'], 'pets': {}}
+    # A run over one pet keeps the other pet's recorded hashes: --only must not
+    # drop what it did not rebuild.
+    lock_path = ROOT / 'scripts' / 'mascot-sources.lock.json'
+    kept = json.loads(lock_path.read_text(encoding='utf-8'))['pets'] if lock_path.exists() else {}
+    lock = {'upstream': doc['upstream'], 'commit': doc['commit'], 'pets': dict(kept)}
 
     for pet, config in doc['pets'].items():
         if args.only and pet != args.only:
@@ -187,14 +191,21 @@ def main():
             start = min(candidates, key=lambda at: seam_score(images[key], at, frames, action_boxes[key]))
             box = union_box(images[key], start, frames)
             width, height = box[2] - box[0], box[3] - box[1]
-            scale = min(base, OUT_W / width, OUT_H / height)
+            # The pack draws some actions smaller than the idle one; `scale`
+            # lifts one back to the idle height, and the part that then stands
+            # above the cell is cropped off its top.
+            fit = min(base, OUT_W / width, OUT_H / height)
+            scale = min(fit * action.get('scale', 1), OUT_W / width)
             strip = Image.new('RGBA', (frames * OUT_W, OUT_H), (0, 0, 0, 0))
             for index in range(frames):
                 frame = cell(images[key], start + index).crop(box)
                 w = max(1, min(OUT_W, round(width * scale)))
-                h = max(1, min(OUT_H, round(height * scale)))
+                h = max(1, round(height * scale))
                 frame = frame.resize((w, h), Image.LANCZOS)
-                strip.alpha_composite(frame, (index * OUT_W + (OUT_W - w) // 2, OUT_H - h))
+                # Art taller than the cell keeps the shared ground line and
+                # loses its top: crop what stands above the cell before it goes in.
+                top = max(0, h - OUT_H)
+                strip.alpha_composite(frame.crop((0, top, w, h)), (index * OUT_W + (OUT_W - w) // 2, OUT_H - h + top))
             path = out_dir / f'{key}.webp'
             strip.save(path, 'WEBP', quality=82, method=6)
             derived[key] = {
@@ -234,7 +245,6 @@ def main():
         }
         print(f'  wrote {out_dir.relative_to(ROOT)}/ ({{}})'.format(', '.join(sorted(sheets))))
 
-    lock_path = ROOT / 'scripts' / 'mascot-sources.lock.json'
     lock_path.write_text(json.dumps(lock, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(f'\nwrote {lock_path.relative_to(ROOT)}')
     print('\nTS tables (paste into packages/client/src/features/mascot/sheets.ts):')

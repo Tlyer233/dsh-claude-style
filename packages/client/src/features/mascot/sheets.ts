@@ -149,7 +149,7 @@ export const WHALE_GIRL_SHEETS: Record<string, { frames: number, box: number[], 
  * `tickle` shares the happy one, so the frames and still match the source.
  */
 export const GEMINI_FRAME_MS = 83
-export const GEMINI_SHEETS: Record<string, { frames: number, box: number[], still: number, columns: number, frameMs?: number }> = {
+export const GEMINI_SHEETS: Record<string, { frames: number, box: number[], still: number, columns: number }> = {
   'idle': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
   'idle-look': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'idle-spout': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
@@ -164,9 +164,9 @@ export const GEMINI_SHEETS: Record<string, { frames: number, box: number[], stil
   'compacting': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'sleeping': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
   'waking': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
-  'poke-left': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20, frameMs: 50 },
-  'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20, frameMs: 50 },
-  'tickle': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24, frameMs: 50 },
+  'poke-left': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'tickle': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'drag': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'landing': { frames: 6, box: [0, 0, 48, 60], still: 5, columns: 48 },
 }
@@ -178,7 +178,7 @@ export const GEMINI_SHEETS: Record<string, { frames: number, box: number[], stil
  * action, and `poke-left`/`poke-right` share the shy one.
  */
 export const QWEN_FRAME_MS = 83
-export const QWEN_SHEETS: Record<string, { frames: number, box: number[], still: number, columns: number, frameMs?: number }> = {
+export const QWEN_SHEETS: Record<string, { frames: number, box: number[], still: number, columns: number }> = {
   'idle': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
   'idle-look': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'idle-spout': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
@@ -193,9 +193,9 @@ export const QWEN_SHEETS: Record<string, { frames: number, box: number[], still:
   'compacting': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'sleeping': { frames: 48, box: [0, 0, 48, 60], still: 0, columns: 48 },
   'waking': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
-  'poke-left': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20, frameMs: 50 },
-  'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20, frameMs: 50 },
-  'tickle': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20, frameMs: 50 },
+  'poke-left': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'poke-right': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
+  'tickle': { frames: 20, box: [0, 0, 48, 60], still: 0, columns: 20 },
   'drag': { frames: 24, box: [0, 0, 48, 60], still: 0, columns: 24 },
   'landing': { frames: 6, box: [0, 0, 48, 60], still: 5, columns: 48 },
 }

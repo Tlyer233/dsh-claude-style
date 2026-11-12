@@ -57,7 +57,7 @@
         "conducting": { "id": "优雅折扇舞", "start": 0, "frames": 24, "still": 0 },
         "building": { "id": "工作状态-清点归档", "start": 0, "frames": 24, "still": 0 },
         "error": { "id": "傲娇生气", "start": 0, "frames": 20, "still": 0 },
-        "happy": { "id": "开心跃动", "start": 0, "frames": 24, "still": 0 },
+        "happy": { "id": "开心跃动", "start": 0, "frames": 24, "still": 0, "scale": 1.445 },
         "wait": { "id": "合扇敲掌·等待不耐烦", "start": 0, "frames": 24, "still": 0 },
         "compacting": { "id": "工作状态-忙碌点按", "start": 0, "frames": 24, "still": 0 },
         "sleeping": { "id": "原地小憩沉眠", "start": 0, "frames": 48, "still": 0 },

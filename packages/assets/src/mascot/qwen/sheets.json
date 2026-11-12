@@ -281,6 +281,7 @@
     "columns": 48,
     "width": 9216,
     "height": 240,
-    "source": "idle (landing)"
+    "source": "待机呼吸休闲",
+    "start": 24
   }
 }

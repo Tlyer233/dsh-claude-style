@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 27,
+  "at": "2026-11-12",
+  "external": false,
+  "zh": "让所有一次性动作也正放再倒放，并取消点击回应的提速",
+  "en": "Play every one-off animation forward and back, and drop the sped-up click reactions"
+}

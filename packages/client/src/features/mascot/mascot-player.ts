@@ -129,11 +129,13 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   /** What the stage's decisions read off the page: an idle extra starts only in motion, on a visible page. */
   const surroundings = () => ({ extras: character.extras, extrasAllowed: !motionReduced() && !document.hidden, random: Math.random })
 
-  /** How long one round of an animation lasts: its own per-frame durations, or its frame count at the sheet's pace. */
+  /** How long one round of an animation lasts: its own per-frame durations, or the frames it plays at the sheet's pace. */
   const playMs = (key: string) => {
     const sheet = SHEETS[key]
     const frameMs = sheet.frameMs ?? FRAME_MS
-    return sheet.durs === undefined ? sheet.frames * frameMs : sheet.durs.reduce((sum, ms) => sum + ms, 0)
+    if (sheet.durs !== undefined) return sheet.durs.reduce((sum, ms) => sum + ms, 0)
+    const sequence = sequenceOf(sheet)
+    return (sequence === null ? sheet.frames : sequence.length) * frameMs
   }
 
   /** The character's sheet pipeline. */
@@ -293,14 +295,17 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     strip.style.transform = ''
     const keyframes: Keyframe[] = []
     let duration: number
-    const sequence = sequenceOf(sheet, mode)
+    const sequence = sequenceOf(sheet)
     const frameMs = sheet.frameMs ?? FRAME_MS
     if (sequence !== null) {
       duration = sequence.length * frameMs
       for (let at = 0; at < sequence.length; at++) {
         keyframes.push({ offset: at / sequence.length, transform: frameOffset(sheet, sequence[at]), easing: 'steps(1)' })
       }
-      keyframes.push({ offset: 1, transform: frameOffset(sheet, mode === 'loop' ? 0 : sheet.frames - 1) })
+      // A ping-pong round and a loop close on the first frame; a one-way
+      // animation closes on its last, which it then holds.
+      const closing = sequence.length > sheet.frames || mode === 'loop' ? 0 : sheet.frames - 1
+      keyframes.push({ offset: 1, transform: frameOffset(sheet, closing) })
     } else if (sheet.durs !== undefined) {
       const durs = sheet.durs
       duration = durs.reduce((sum, ms) => sum + ms, 0)
@@ -404,15 +409,16 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
   }
 
   /**
-   * The frame order one round of an animation plays: a ping-pong loop walks
-   * forward and then back through the same frames, so its seam repeats a pose
-   * instead of jumping; a sheet with per-frame durations has no such order.
+   * The frame order one round of an animation plays: a ping-pong character
+   * walks forward and then back through the same frames, so its seam repeats a
+   * pose instead of jumping, and a one-off answer returns to the pose it left.
+   * A sheet with per-frame durations has no such order.
    */
-  function sequenceOf(sheet: MascotSheet, mode: PlayMode): number[] | null {
+  function sequenceOf(sheet: MascotSheet): number[] | null {
     if (sheet.durs !== undefined) return null
     const sequence: number[] = []
     for (let frame = 0; frame < sheet.frames; frame++) sequence.push(frame)
-    if (character.pingpongLoops === true && mode === 'loop' && sheet.frames > 2) {
+    if (character.pingpongLoops === true && sheet.frames > 2) {
       for (let frame = sheet.frames - 2; frame > 0; frame--) sequence.push(frame)
     }
     return sequence
@@ -426,7 +432,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     const current = stage.current
     if (current === null) return null
     const sheet = SHEETS[current.key]
-    const sequence = sequenceOf(sheet, current.mode)
+    const sequence = sequenceOf(sheet)
     if (sequence === null) return null
     if (still() && stage.animation === null) return { key: current.key, frame: sheet.still }
     const time = stage.animation !== null && typeof stage.animation.currentTime === 'number' ? stage.animation.currentTime : 0

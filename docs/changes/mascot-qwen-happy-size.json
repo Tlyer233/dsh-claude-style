@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 26,
+  "at": "2026-11-12",
+  "external": false,
+  "zh": "放大 Qwen 的完成动作，使其与其余动作等高",
+  "en": "Scale up Qwen's completion animation so it matches the height of the other actions"
+}
