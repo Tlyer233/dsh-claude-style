@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 28,
+  "at": "2026-11-12",
+  "external": false,
+  "zh": "连点四下立即进入挠痒，不再等当前回应播完",
+  "en": "Take the stage for the fourth rapid click's tickle instead of waiting out the reaction on screen"
+}

@@ -514,11 +514,13 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
    * first frame (`fresh` until it is shown, even over the same reaction
    * still on screen); until its sheet is ready, what is on screen keeps
    * playing.
+   * @param force - the reader asked for this one outright: it takes the
+   * stage even while another reaction still plays.
    */
-  function react(key: string, mode: PlayMode) {
+  function react(key: string, mode: PlayMode, force = false) {
     // A patient character finishes the reaction it is already playing before
     // another press can start one; the strip never restarts mid-poke.
-    if (character.patientInteractions === true && stage.reaction !== null) return
+    if (!force && character.patientInteractions === true && stage.reaction !== null) return
     stage.reaction = { key, mode, fresh: true }
     step()
   }
@@ -567,7 +569,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     return lifted
   }
 
-  /** A press let go without a lift pokes the side it landed on — or tickles, the fourth in a row. */
+  /** A press let go without a lift pokes the side it landed on — or tickles, the fourth in a row, taking the stage outright. */
   function onPressEnd(event: PointerEvent) {
     if (endPress(event) !== false) return
     const now = Date.now()
@@ -575,7 +577,7 @@ export function createMascotPlayer(ctx: HostContext, ui: FeatureUi<typeof manife
     stage.clicks.push(now)
     if (stage.clicks.length >= TICKLE_CLICKS) {
       stage.clicks = []
-      react('tickle', 'once')
+      react('tickle', 'once', true)
       return
     }
     const box = (event.currentTarget as Element).getBoundingClientRect()
