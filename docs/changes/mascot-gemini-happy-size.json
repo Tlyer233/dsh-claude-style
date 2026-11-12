@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 29,
+  "at": "2026-11-12",
+  "external": false,
+  "zh": "放大 Gemini 的完成与挠痒动作，使其与待机等高",
+  "en": "Scale up Gemini's completion and tickle animations so they match the height of the idle one"
+}

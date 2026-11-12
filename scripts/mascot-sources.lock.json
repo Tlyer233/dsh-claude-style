@@ -30,15 +30,16 @@
         "conducting": "fc0a294aab5b04fabe83ca835eca79f15eed68efd80fbc3fc9fdd27247e31c42",
         "building": "1c0325d97165d716a56bcc0f99aeb63aec2763fc9daee088bd3bef4b2ae70b99",
         "error": "b15363469ef435b82f73619bee7e66e8efc079a2f2fb1048646c0cf261d83e8a",
-        "happy": "90953a05aadf01aacc6cff952b3685cdb766a96bfbec83311eb244d4cfa2433e",
+        "happy": "73565642f8afb364a11a8d78f880db673e72b6f9219485ddd207fb327fc82806",
         "notification": "581eaffc8fd7ff07d1552f100920607e8a5fba1d682103140a81fe0b3962361f",
         "compacting": "4ecb658c657a93020345574e9bb1dc520d2ee678ee568855e155393eeac8199d",
         "sleeping": "fea2e3aa37860be42973f6af1e285a22b1db0a0b2782697b8232ae6ca5330946",
         "waking": "05543709c26114d483352c1f362dca23efb7a01b01f4a0017fad981395f7a78c",
         "poke-left": "581eaffc8fd7ff07d1552f100920607e8a5fba1d682103140a81fe0b3962361f",
         "poke-right": "581eaffc8fd7ff07d1552f100920607e8a5fba1d682103140a81fe0b3962361f",
-        "tickle": "90953a05aadf01aacc6cff952b3685cdb766a96bfbec83311eb244d4cfa2433e",
-        "drag": "45dc2031b8b334270ce8884d4c55e9938bbd15e0887592fb66789d7db1c99e00"
+        "tickle": "73565642f8afb364a11a8d78f880db673e72b6f9219485ddd207fb327fc82806",
+        "drag": "45dc2031b8b334270ce8884d4c55e9938bbd15e0887592fb66789d7db1c99e00",
+        "landing": "26d869e6bc4c4aa5a47c1bcba1d6a3720c024e3f174a079f81f006cd9f055f75"
       }
     },
     "qwen": {

@@ -16,7 +16,7 @@
         "conducting": { "id": "优雅猫耳娘舞", "start": 0, "frames": 24, "still": 0 },
         "building": { "id": "工作状态-清点归档", "start": 0, "frames": 24, "still": 0 },
         "error": { "id": "点击回应-傲娇生气", "start": 0, "frames": 20, "still": 0 },
-        "happy": { "id": "点击回应-开心跃动", "start": 0, "frames": 24, "still": 0 },
+        "happy": { "id": "点击回应-开心跃动", "start": 0, "frames": 24, "still": 0, "scale": 1.19 },
         "shy": { "id": "点击回应-害羞惊讶", "start": 0, "frames": 20, "still": 0 },
         "compacting": { "id": "工作状态-忙碌点按", "start": 0, "frames": 24, "still": 0 },
         "sleeping": { "id": "原地小憩沉眠", "start": 0, "frames": 48, "still": 0 },
