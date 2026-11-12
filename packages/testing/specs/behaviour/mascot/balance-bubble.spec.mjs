@@ -1,14 +1,12 @@
 /**
- * Resting the mouse on the mascot opens a pixel bubble: the account balance,
- * gifted wallets included, on top, and under it, quieter, what the
+ * Resting the mouse on the mascot opens a pixel bubble holding what the
  * conversation on screen has cost — the same figure the statistics line
- * prints, with the balance carrying as many places and falling as that cost
- * grows. A press on the mascot
- * closes it, and with nothing to show there is no bubble.
+ * prints, following it as it grows. A press on the mascot closes it, and with
+ * nothing to show there is no bubble.
  *
  * @capability mascot
  * @features mascot, context-stats
- * @risk Hovering the mascot shows nothing, shows a cost that disagrees with the statistics line, or leaves an empty bubble over the composer for a reader with no account and billing off.
+ * @risk Hovering the mascot shows nothing, shows a cost that disagrees with the statistics line, or leaves an empty bubble over the composer with billing off.
  */
 import { CONVERSATION_PARTS } from '@dsh-claude-style/engine/parts-table'
 import { spec, host } from '../../fixtures/behaviour.mjs'
@@ -70,25 +68,18 @@ async function restOnCrab(t) {
 }
 
 export default spec({ page: 'stats-inline' }, ({ test }) => {
-  test('resting on the crab shows the balance above the conversation\'s cost, the cost quieter and equal to the statistics line, the balance falling as it grows', async (t) => {
+  test('resting on the crab shows the conversation\'s cost alone, equal to the statistics line, and it follows the conversation', async (t) => {
     await pricedCrab(t)
-    // The platform's own long decimals, and a gifted wallet beside the topped-up one.
-    await t.page.evaluate(() => {
-      window.__balanceFixture = { ok: true, value: { status: 'ready', value: [{ currency: 'CNY', balance: '1.6062994000000000' }], bonusWallets: [{ currency: 'CNY', balance: '10.00' }] } }
-    })
     await restOnCrab(t)
     const bubble = await readBubble(t)
     t.expectThat.equal(bubble?.open, true, 'the bubble opens')
-    t.expectThat.equal(bubble.rows.map((line) => line.kind), ['balance', 'session'], 'the balance stands above the cost')
-    t.expectThat.equal(bubble.rows[0].text.endsWith('¥11.6063'), true,
-      `the balance counts the gifted wallet in and carries the cost's four places (${bubble.rows[0].text})`)
+    t.expectThat.equal(bubble.rows.map((line) => line.kind), ['session'], 'the cost stands alone')
     const line = await t.read.text(t.surface('stats.inline-cost'))
-    t.expectThat.equal(bubble.rows[1].text.endsWith(line.trim()), true, `the cost is the statistics line's own figure (${bubble.rows[1].text} against ${line})`)
-    t.expectThat.equal(bubble.rows[0].colour !== bubble.rows[1].colour, true, 'the cost takes a quieter ink than the balance')
+    t.expectThat.equal(bubble.rows[0].text.endsWith(line.trim()), true, `the cost is the statistics line's own figure (${bubble.rows[0].text} against ${line})`)
     t.expectThat.equal(bubble.font.startsWith('"Claude Style Pixel"'), true, `the bubble is set in the pixel face (${bubble.font})`)
 
     // The conversation settles ¥0.1 more while the bubble stands open: the
-    // balance falls by as much without asking the platform again.
+    // figure follows it.
     await t.page.waitForTimeout(1600)
     await t.page.evaluate(([value, usage]) => {
       window.__costFixture.value = value
@@ -96,8 +87,8 @@ export default spec({ page: 'stats-inline' }, ({ test }) => {
     }, [{ ...TOTAL, cny: TOTAL.cny + 100000 }, PRICED_USAGE])
     await t.page.waitForFunction((selector) => document.querySelector(selector)?.innerText.includes('0.1123'), t.surface('stats.inline-cost'), { timeout: 5000 })
     const spent = await readBubble(t)
-    t.expectThat.equal(spent.rows.map((line) => line.text.split(' ').pop()), ['¥11.5063', '¥0.1123'],
-      'the balance falls by what the conversation spent since it was read')
+    t.expectThat.equal(spent.rows.map((line) => line.text.split(' ').pop()), ['¥0.1123'],
+      'the cost follows what the conversation spent')
 
     await t.page.mouse.down()
     t.expectThat.equal((await readBubble(t)).open, false, 'a press on the crab closes the bubble')
@@ -107,7 +98,6 @@ export default spec({ page: 'stats-inline' }, ({ test }) => {
   test('with no account and billing off, there is nothing to show and no bubble', async (t) => {
     await pricedCrab(t)
     await t.prefs({ billingCurrency: 'off' })
-    await t.page.evaluate(() => { window.__balanceFixture = { ok: true, value: null } })
     await restOnCrab(t)
     t.expectThat.equal((await readBubble(t))?.open ?? false, false, 'no bubble opens')
   })
