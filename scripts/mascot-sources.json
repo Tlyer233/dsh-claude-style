@@ -9,7 +9,7 @@
       "actions": {
         "idle": { "id": "待机呼吸休闲", "start": 0, "frames": 48, "still": 0 },
         "mirror": { "id": "照镜子", "start": 0, "frames": 24, "still": 0 },
-        "hum": { "id": "悠闲哼歌", "start": 0, "frames": 24, "still": 0 },
+        "hum": { "id": "悠闲哼歌", "start": 0, "frames": 24, "still": 0, "scale": 1.17 },
         "thinking": { "id": "工作状态-思考冒泡", "start": 0, "frames": 24, "still": 8 },
         "typing": { "id": "写代码", "start": 0, "frames": 24, "still": 8 },
         "music": { "id": "小提琴演奏", "start": 0, "frames": 24, "still": 0 },
@@ -50,7 +50,7 @@
       "actions": {
         "idle": { "id": "待机呼吸休闲", "start": 0, "frames": 48, "still": 0 },
         "look": { "id": "东张西望", "start": 0, "frames": 24, "still": 0 },
-        "hum": { "id": "悠闲哼歌", "start": 0, "frames": 24, "still": 0 },
+        "hum": { "id": "悠闲哼歌", "start": 0, "frames": 24, "still": 0, "scale": 1.07 },
         "thinking": { "id": "工作状态-思考冒泡", "start": 0, "frames": 24, "still": 8 },
         "typing": { "id": "写代码", "start": 0, "frames": 24, "still": 8 },
         "music": { "id": "小提琴演奏", "start": 0, "frames": 24, "still": 0 },

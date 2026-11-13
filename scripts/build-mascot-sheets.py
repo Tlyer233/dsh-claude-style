@@ -192,20 +192,22 @@ def main():
             box = union_box(images[key], start, frames)
             width, height = box[2] - box[0], box[3] - box[1]
             # The pack draws some actions smaller than the idle one; `scale`
-            # lifts one back to the idle height, and the part that then stands
-            # above the cell is cropped off its top.
+            # lifts one back to the idle height, and whatever then stands
+            # outside the cell is cropped off.
             fit = min(base, OUT_W / width, OUT_H / height)
-            scale = min(fit * action.get('scale', 1), OUT_W / width)
+            scale = fit * action.get('scale', 1)
             strip = Image.new('RGBA', (frames * OUT_W, OUT_H), (0, 0, 0, 0))
             for index in range(frames):
                 frame = cell(images[key], start + index).crop(box)
-                w = max(1, min(OUT_W, round(width * scale)))
+                w = max(1, round(width * scale))
                 h = max(1, round(height * scale))
                 frame = frame.resize((w, h), Image.LANCZOS)
-                # Art taller than the cell keeps the shared ground line and
-                # loses its top: crop what stands above the cell before it goes in.
+                # Art wider or taller than the cell keeps its centre and ground
+                # line: the part outside the cell is cut before it goes in.
+                left = max(0, (w - OUT_W) // 2)
                 top = max(0, h - OUT_H)
-                strip.alpha_composite(frame.crop((0, top, w, h)), (index * OUT_W + (OUT_W - w) // 2, OUT_H - h + top))
+                piece = frame.crop((left, top, left + min(w, OUT_W), top + min(h, OUT_H)))
+                strip.alpha_composite(piece, (index * OUT_W + max(0, (OUT_W - w) // 2), max(0, OUT_H - h)))
             path = out_dir / f'{key}.webp'
             strip.save(path, 'WEBP', quality=82, method=6)
             derived[key] = {

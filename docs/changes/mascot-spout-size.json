@@ -1,0 +1,8 @@
+{
+  "group": "fixes",
+  "order": 30,
+  "at": "2026-11-13",
+  "external": false,
+  "zh": "放大 Qwen 与 Gemini 的哼歌动作，使其与待机等高",
+  "en": "Scale up the Qwen and Gemini humming animation so it matches the height of the idle one"
+}
