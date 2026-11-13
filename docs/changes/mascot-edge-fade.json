@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 31,
+  "at": "2026-11-13",
+  "external": false,
+  "zh": "越出格子的动作边缘改为渐隐，不再被硬边切平",
+  "en": "Fade the art that runs past the sprite cell instead of cutting it flat"
+}

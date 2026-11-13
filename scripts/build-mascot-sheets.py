@@ -37,6 +37,8 @@ COLS, ROWS = 8, 15
 CELL_W, CELL_H = 48, 60
 OUT_W, OUT_H = CELL_W * 4, CELL_H * 4
 TARGET_H = 208
+# How far the art running past the cell fades before the cut.
+EDGE_FADE = 14
 
 
 def sha256(path):
@@ -135,6 +137,24 @@ def seam_score(image, start, frames, box):
     return diff_score(first, last)
 
 
+def edge_mask(size, fade, top, sides):
+    """An alpha ramp on the edges the art runs past: what the cell cuts off fades out first."""
+    width, height = size
+    mask = Image.new('L', size, 255)
+    load = mask.load()
+    for y in range(height):
+        for x in range(width):
+            value = 255
+            if top and y < fade:
+                value = min(value, round(255 * y / fade))
+            if sides and x < fade:
+                value = min(value, round(255 * x / fade))
+            if sides and width - 1 - x < fade:
+                value = min(value, round(255 * (width - 1 - x) / fade))
+            load[x, y] = value
+    return mask
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--proxy', default=os.environ.get('HTTPS_PROXY') or 'http://127.0.0.1:7897')
@@ -197,16 +217,22 @@ def main():
             fit = min(base, OUT_W / width, OUT_H / height)
             scale = fit * action.get('scale', 1)
             strip = Image.new('RGBA', (frames * OUT_W, OUT_H), (0, 0, 0, 0))
+            w = max(1, round(width * scale))
+            h = max(1, round(height * scale))
+            # Art wider or taller than the cell keeps its centre and ground
+            # line; the edges it runs past fade out before the cell cuts them.
+            left = max(0, (w - OUT_W) // 2)
+            top = max(0, h - OUT_H)
+            piece_size = (min(w, OUT_W), min(h, OUT_H))
+            mask = None
+            if top > 0 or w > OUT_W:
+                mask = edge_mask(piece_size, EDGE_FADE, top > 0, w > OUT_W)
             for index in range(frames):
                 frame = cell(images[key], start + index).crop(box)
-                w = max(1, round(width * scale))
-                h = max(1, round(height * scale))
                 frame = frame.resize((w, h), Image.LANCZOS)
-                # Art wider or taller than the cell keeps its centre and ground
-                # line: the part outside the cell is cut before it goes in.
-                left = max(0, (w - OUT_W) // 2)
-                top = max(0, h - OUT_H)
-                piece = frame.crop((left, top, left + min(w, OUT_W), top + min(h, OUT_H)))
+                piece = frame.crop((left, top, left + piece_size[0], top + piece_size[1]))
+                if mask is not None:
+                    piece.putalpha(ImageChops.multiply(piece.getchannel('A'), mask))
                 strip.alpha_composite(piece, (index * OUT_W + max(0, (OUT_W - w) // 2), max(0, OUT_H - h)))
             path = out_dir / f'{key}.webp'
             strip.save(path, 'WEBP', quality=82, method=6)
