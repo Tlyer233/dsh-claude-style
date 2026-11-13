@@ -1,0 +1,40 @@
+{
+  "name": "gemini-theme",
+  "displayName": "Gemini Theme",
+  "description": "Gemini 紫的深浅两套主题，取自 dsh-claude-style 的 Gemini 品牌色",
+  "version": "0.1.0",
+  "publisher": "Tlyer233",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Tlyer233/dsh-claude-style.git",
+    "directory": "vscode-theme"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "gemini",
+    "purple",
+    "dark",
+    "light"
+  ],
+  "contributes": {
+    "themes": [
+      {
+        "label": "Gemini Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/gemini-dark.json"
+      },
+      {
+        "label": "Gemini Light",
+        "uiTheme": "vs",
+        "path": "./themes/gemini-light.json"
+      }
+    ]
+  }
+}
