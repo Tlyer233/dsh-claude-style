@@ -8,7 +8,7 @@ Gemini 的 VS Code 主题，深浅两套。
 ## 安装
 
 ```bash
-code --install-extension gemini-theme-0.1.3.vsix
+code --install-extension gemini-theme-0.1.4.vsix
 ```
 
 然后在 `文件 > 首选项 > 颜色主题`（`Cmd+K Cmd+T`）里选 **Gemini Dark** 或 **Gemini Light**。
