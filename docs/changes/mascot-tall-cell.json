@@ -1,0 +1,8 @@
+{
+  "group": "improvements",
+  "order": 32,
+  "at": "2026-11-14",
+  "external": false,
+  "zh": "放大 Qwen 与 Gemini 完成和哼歌动作的格子，音符与爱心不再被顶部裁掉",
+  "en": "Give the Qwen and Gemini completion and humming animations a taller cell so their notes and hearts are no longer cut at the top"
+}

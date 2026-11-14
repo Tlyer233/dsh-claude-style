@@ -35,12 +35,12 @@
       0,
       0,
       48,
-      60
+      72
     ],
     "still": 0,
     "columns": 24,
     "width": 4608,
-    "height": 240,
+    "height": 288,
     "source": "悠闲哼歌",
     "start": 40
   },
@@ -140,12 +140,12 @@
       0,
       0,
       48,
-      60
+      72
     ],
     "still": 0,
     "columns": 24,
     "width": 4608,
-    "height": 240,
+    "height": 288,
     "source": "开心跃动",
     "start": 17
   },

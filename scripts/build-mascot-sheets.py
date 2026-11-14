@@ -214,16 +214,20 @@ def main():
             # The pack draws some actions smaller than the idle one; `scale`
             # lifts one back to the idle height, and whatever then stands
             # outside the cell is cropped off.
-            fit = min(base, OUT_W / width, OUT_H / height)
+            # An action may ask for a taller cell than the shared 48x60, so the
+            # art that would run past its top keeps the room it needs.
+            cell_h = action.get('cell', CELL_H)
+            out_h = cell_h * 4
+            fit = min(base, OUT_W / width, out_h / height)
             scale = fit * action.get('scale', 1)
-            strip = Image.new('RGBA', (frames * OUT_W, OUT_H), (0, 0, 0, 0))
+            strip = Image.new('RGBA', (frames * OUT_W, out_h), (0, 0, 0, 0))
             w = max(1, round(width * scale))
             h = max(1, round(height * scale))
             # Art wider or taller than the cell keeps its centre and ground
             # line; the edges it runs past fade out before the cell cuts them.
             left = max(0, (w - OUT_W) // 2)
-            top = max(0, h - OUT_H)
-            piece_size = (min(w, OUT_W), min(h, OUT_H))
+            top = max(0, h - out_h)
+            piece_size = (min(w, OUT_W), min(h, out_h))
             mask = None
             if top > 0 or w > OUT_W:
                 mask = edge_mask(piece_size, EDGE_FADE, top > 0, w > OUT_W)
@@ -233,16 +237,16 @@ def main():
                 piece = frame.crop((left, top, left + piece_size[0], top + piece_size[1]))
                 if mask is not None:
                     piece.putalpha(ImageChops.multiply(piece.getchannel('A'), mask))
-                strip.alpha_composite(piece, (index * OUT_W + max(0, (OUT_W - w) // 2), max(0, OUT_H - h)))
+                strip.alpha_composite(piece, (index * OUT_W + max(0, (OUT_W - w) // 2), max(0, out_h - h)))
             path = out_dir / f'{key}.webp'
             strip.save(path, 'WEBP', quality=82, method=6)
             derived[key] = {
                 'frames': frames,
-                'box': [0, 0, CELL_W, CELL_H],
+                'box': [0, 0, CELL_W, cell_h],
                 'still': min(action['still'], frames - 1),
                 'columns': frames,
                 'width': frames * OUT_W,
-                'height': OUT_H,
+                'height': out_h,
                 'source': action['id'],
                 'start': start,
             }
@@ -284,7 +288,8 @@ def main():
         print(f'\nexport const {name}_FRAME_MS = 83')
         print(f'export const {name}_SHEETS: Record<string, {{ frames: number, box: number[], still: number, columns: number }}> = {{')
         for state, meta in sheets.items():
-            print(f"  '{state}': {{ frames: {meta['frames']}, box: [0, 0, {CELL_W}, {CELL_H}], still: {meta['still']}, columns: {meta['columns']} }},")
+            box = meta['box']
+            print(f"  '{state}': {{ frames: {meta['frames']}, box: [0, 0, {box[2]}, {box[3]}], still: {meta['still']}, columns: {meta['columns']} }},")
         print('}')
 
 

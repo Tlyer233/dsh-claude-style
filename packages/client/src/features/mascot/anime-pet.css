@@ -23,6 +23,13 @@ body[data-dsh-claude-style] :is(
   bottom: calc(100% - 7px);
 }
 
+/* A taller cell grows upward: the sprite's bottom edge stays on the
+   container's, so the pet keeps its feet on the card and takes the room
+   above it. */
+body[data-dsh-claude-style] :is(.dsh-claude-gemini, .dsh-claude-qwen) > :is(.dsh-claude-gemini-sprite, .dsh-claude-qwen-sprite) {
+  top: calc((60 - var(--dsh-claude-mascot-h, 60)) * 2px);
+}
+
 /* The resting girl's body, head to feet: most of the 96×120 box. */
 body[data-dsh-claude-style] :is(.dsh-claude-gemini-hit, .dsh-claude-qwen-hit) {
   position: absolute;
